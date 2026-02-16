@@ -11,9 +11,9 @@ const STEPS = [
 
 export function LandingHowItWorks() {
   return (
-    <div className="mb-7">
+    <div className="mb-7 lg:mb-10">
       <SectionTitle>How It Works</SectionTitle>
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5 lg:gap-3">
         {STEPS.map((s) => (
           <Card key={s.n} className="p-3">
             <div className="text-lg font-bold text-fc-green opacity-50 mb-1">{s.n}</div>

@@ -25,13 +25,13 @@ export function LandingOpenMatches() {
   const { setConnecting } = useAuthStore();
 
   return (
-    <div className="mb-7">
+    <div>
       <SectionTitle right={`${MOCK_OPEN_MATCHES.length} waiting`}>
         Open H2H Matches
       </SectionTitle>
 
       <div className="flex flex-col gap-1">
-        {MOCK_OPEN_MATCHES.slice(0, 3).map((match) => (
+        {MOCK_OPEN_MATCHES.map((match) => (
           <OpenMatchCard
             key={match.id}
             match={match}
@@ -44,7 +44,7 @@ export function LandingOpenMatches() {
         className="text-center py-2 text-3xs text-fc-text-dim cursor-pointer hover:text-fc-text-muted transition-colors"
         onClick={() => setConnecting(true)}
       >
-        Connect wallet to see all matches →
+        Connect wallet to join a match →
       </div>
     </div>
   );

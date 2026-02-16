@@ -117,7 +117,7 @@ export default function HistoryPage() {
 
   return (
     <PageShell>
-      <div className="px-4 py-8 pb-16 space-y-5 max-w-3xl mx-auto">
+      <div className="px-4 py-8 pb-16 space-y-5 max-w-5xl mx-auto">
         <h1 className="text-xl font-mono tracking-widest font-bold">MATCH HISTORY</h1>
 
         {/* Summary Stats */}

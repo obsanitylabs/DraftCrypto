@@ -56,7 +56,7 @@ export default function ReferralPage() {
 
   return (
     <PageShell>
-      <div className="px-4 py-8 pb-16 space-y-6 max-w-3xl mx-auto">
+      <div className="px-4 py-8 pb-16 space-y-6 max-w-5xl mx-auto">
         <h1 className="text-xl font-mono tracking-widest font-bold">REFERRALS</h1>
 
         {/* How it works */}

@@ -53,7 +53,7 @@ export default function FAQPage() {
 
   return (
     <PageShell>
-      <div className="px-4 py-8 pb-16 max-w-3xl mx-auto">
+      <div className="px-4 py-8 pb-16 max-w-5xl mx-auto">
         <div className="border-b border-fc-border pb-6 mb-8">
           <h1 className="text-xl font-mono tracking-widest font-bold">FAQ</h1>
           <p className="text-sm text-fc-text-dim tracking-wider mt-2">Frequently asked questions</p>

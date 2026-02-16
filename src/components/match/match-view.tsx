@@ -105,7 +105,7 @@ export function MatchView({ matchId }: MatchViewProps) {
   const closedPositions = positions.filter(p => p.status.startsWith('closed') || p.status === 'liquidated');
 
   return (
-    <div className="px-4 pb-10">
+    <div className="px-4 lg:px-8 pb-10 max-w-6xl mx-auto">
       {/* PnL Header */}
       <div className="flex items-start justify-between py-4 border-b border-fc-border-green mb-3">
         <div className="text-center flex-1">

@@ -14,11 +14,11 @@ export function LandingHero() {
         <Logo size="lg" />
       </div>
 
-      <h1 className="text-2xl font-bold tracking-tight mb-2">
+      <h1 className="text-2xl lg:text-4xl font-bold tracking-tight mb-2">
         Draft. Trade. Compete.
       </h1>
 
-      <p className="text-2xs text-fc-text-muted max-w-[380px] mx-auto mb-7 leading-relaxed">
+      <p className="text-2xs lg:text-sm text-fc-text-muted max-w-[380px] lg:max-w-xl mx-auto mb-7 leading-relaxed">
         Draft crypto portfolios in live snake drafts. Compete head-to-head
         or in 12-player leagues. Win real USDC wagers. Powered by Pear
         Protocol on Hyperliquid.
@@ -34,7 +34,7 @@ export function LandingHero() {
       </Button>
 
       {/* Featured Tournament */}
-      <div className="mt-8 fc-card fc-accent-top p-4 text-left">
+      <div className="mt-8 fc-card fc-accent-top p-4 text-left max-w-lg mx-auto">
         <div className="fc-section-title mb-1">FEATURED</div>
         <div className="text-sm font-bold text-fc-green">
           🏆 Weekly Tournament — 10 USDC Entry

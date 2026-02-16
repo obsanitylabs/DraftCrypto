@@ -3,7 +3,7 @@ import { PageShell } from '@/components/layout';
 export default function PrivacyPage() {
   return (
     <PageShell>
-      <div className="px-4 py-8 pb-16 space-y-8 max-w-3xl mx-auto">
+      <div className="px-4 py-8 pb-16 space-y-8 max-w-5xl mx-auto">
         <div className="border-b border-fc-border pb-6">
           <h1 className="text-xl font-mono tracking-widest font-bold">PRIVACY POLICY</h1>
           <p className="text-sm text-fc-text-dim tracking-wider mt-2">Last updated: February 2026</p>

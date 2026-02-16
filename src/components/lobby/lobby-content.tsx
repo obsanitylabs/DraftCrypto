@@ -77,7 +77,7 @@ export function LobbyContent() {
   }
 
   return (
-    <div className="px-4 pb-10 max-w-3xl mx-auto">
+    <div className="px-4 lg:px-8 pb-10 max-w-6xl mx-auto">
       {/* Tab Toggle */}
       <div className="flex gap-2 my-4">
         {(['h2h', 'league'] as const).map((t) => (
@@ -90,7 +90,9 @@ export function LobbyContent() {
       </div>
 
       {tab === 'h2h' ? (
-        <>
+        <div className="lg:grid lg:grid-cols-5 lg:gap-8">
+          {/* Left: Match Creation */}
+          <div className="lg:col-span-3">
           {/* Match Type */}
           <div className="mb-4">
             <SectionTitle>Match Type</SectionTitle>
@@ -178,9 +180,10 @@ export function LobbyContent() {
           <Button variant="primary" size="lg" className="w-full tracking-widest" loading={creating || joining} onClick={handleCreate}>
             {creating ? 'CREATING...' : joining ? 'FINDING OPPONENT...' : `CREATE ${matchType.toUpperCase()} / ${duration} MATCH`}
           </Button>
+          </div>
 
-          {/* Open Matches */}
-          <div className="mt-8">
+          {/* Right: Open Matches */}
+          <div className="lg:col-span-2 mt-8 lg:mt-0">
             <SectionTitle right={`${MOCK_OPEN.length} waiting`}>Join Open Match</SectionTitle>
             <div className="flex flex-col gap-2">
               {MOCK_OPEN.map((m) => (
@@ -201,7 +204,7 @@ export function LobbyContent() {
               ))}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="mt-4">
           <SectionTitle>Open Leagues</SectionTitle>

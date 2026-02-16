@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// DraftCrypto — Layout Components
+// DraftCrypto — Layout Components (Responsive)
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -32,12 +32,12 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-50 bg-fc-card/95 backdrop-blur-md border-b border-fc-border">
-        <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 lg:px-8 py-3">
           <Link href={isConnected ? '/lobby' : '/'}>
             <Logo size="sm" />
           </Link>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 lg:gap-2">
             {isConnected && (
               <>
                 <NavLink href="/leaderboard" active={pathname === '/leaderboard'}>Stats</NavLink>
@@ -74,7 +74,7 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
     <Link
       href={href}
       className={cn(
-        'px-2 py-1.5 text-3xs font-mono tracking-wider transition-colors',
+        'px-2 lg:px-3 py-1.5 text-3xs lg:text-xs font-mono tracking-wider transition-colors',
         active ? 'bg-fc-green-glow text-fc-green' : 'text-fc-text-muted hover:text-fc-text',
       )}
     >
@@ -87,8 +87,8 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
 
 export function Footer() {
   return (
-    <footer className="border-t border-fc-border px-4 py-6">
-      <div className="max-w-lg mx-auto space-y-4">
+    <footer className="border-t border-fc-border px-4 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto space-y-4">
         {/* Links */}
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           <FooterLink href="/how-to-play">How to Play</FooterLink>
@@ -125,7 +125,7 @@ export function PageShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-fc-bg">
       <Header />
-      <main className="max-w-lg mx-auto border-x border-fc-border min-h-[calc(100vh-120px)]">
+      <main className="max-w-7xl mx-auto min-h-[calc(100vh-120px)]">
         {children}
       </main>
       <Footer />

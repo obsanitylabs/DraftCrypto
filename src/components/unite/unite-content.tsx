@@ -71,7 +71,7 @@ export function UniteContent() {
     : 0;
 
   return (
-    <div className="px-4 pb-10 max-w-3xl mx-auto">
+    <div className="px-4 lg:px-8 pb-10 max-w-6xl mx-auto">
       {/* Header */}
       <div className="py-5 border-b border-fc-border-green mb-5">
         <div className="flex items-center gap-3 mb-1">

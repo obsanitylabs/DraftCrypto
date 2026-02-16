@@ -70,7 +70,7 @@ export function LeagueLobby() {
   );
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 lg:p-8 space-y-4 max-w-6xl mx-auto">
       <div className="flex items-center justify-between">
         <h1 className="text-sm font-mono tracking-widest">LEAGUES</h1>
         <Button variant="primary" size="sm" onClick={() => setShowCreate(!showCreate)}>

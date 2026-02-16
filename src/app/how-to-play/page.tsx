@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function HowToPlayPage() {
   return (
     <PageShell>
-      <div className="px-4 py-8 pb-16 space-y-10 max-w-3xl mx-auto">
+      <div className="px-4 py-8 pb-16 space-y-10 max-w-5xl mx-auto">
         <div className="border-b border-fc-border pb-6">
           <h1 className="text-xl font-mono tracking-widest font-bold">HOW TO PLAY</h1>
           <p className="text-sm text-fc-text-dim tracking-wider mt-2">

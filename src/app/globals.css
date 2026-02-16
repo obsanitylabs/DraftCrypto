@@ -20,6 +20,19 @@
     font-feature-settings: 'tnum' on, 'lnum' on;
   }
 
+  /* Scale base font for desktop — all rem units grow proportionally */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    html {
+      font-size: 20px;
+    }
+  }
+
   body {
     @apply bg-fc-bg min-h-screen;
   }

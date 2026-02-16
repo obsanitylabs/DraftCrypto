@@ -69,7 +69,7 @@ export function ProfileContent() {
   const [tab, setTab] = useState<'h2h' | 'leagues'>('h2h');
 
   return (
-    <div className="px-4 pb-10 max-w-3xl mx-auto">
+    <div className="px-4 lg:px-8 pb-10 max-w-6xl mx-auto">
       {/* Profile Header */}
       <div className="py-5 border-b border-fc-border-green mb-5">
         <div className="flex items-start justify-between">
@@ -92,6 +92,9 @@ export function ProfileContent() {
       </div>
 
       {/* Stats Grid */}
+      <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+        {/* Left column: Stats */}
+        <div className="lg:col-span-1">
       <SectionTitle>Career Stats</SectionTitle>
       <div className="grid grid-cols-3 gap-2 mb-5">
         <StatCard label="Win Rate" value={`${DEMO_STATS.winRate}%`} color="text-fc-green" />
@@ -114,6 +117,10 @@ export function ProfileContent() {
         </div>
         <ProgressBar value={DEMO_STATS.winRate} max={100} variant="green" />
       </Card>
+        </div>
+
+        {/* Right column: Match History */}
+        <div className="lg:col-span-2">
 
       {/* Match History */}
       <div className="flex items-center justify-between mb-3">
@@ -147,6 +154,8 @@ export function ProfileContent() {
           </div>
         </Card>
       )}
+        </div>
+      </div>
 
       {/* Settings Modal */}
       <Modal open={settingsModal} onClose={() => setSettingsModal(false)} title="Edit Profile">

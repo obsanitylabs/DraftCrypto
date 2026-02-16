@@ -59,7 +59,7 @@ export function DraftRoom({ matchId, matchType = 'full' }: DraftRoomProps) {
   // ── Draft Complete Screen ──
   if (isDraftComplete) {
     return (
-      <div className="px-4 pt-20 pb-10 text-center">
+      <div className="px-4 lg:px-8 pt-20 pb-10 text-center max-w-6xl mx-auto">
         <div className="text-2xl font-bold text-fc-green fc-glow-green mb-2 animate-fade-in">
           DRAFT COMPLETE
         </div>
@@ -81,7 +81,7 @@ export function DraftRoom({ matchId, matchType = 'full' }: DraftRoomProps) {
   }
 
   return (
-    <div className="px-4 pb-10">
+    <div className="px-4 lg:px-8 pb-10 max-w-6xl mx-auto">
       {/* Draft Header: round info + timer */}
       <DraftHeader
         matchType={matchType}
