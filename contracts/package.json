@@ -1,5 +1,5 @@
 {
-  "name": "fantasy-crypto-contracts",
+  "name": "draftcrypto-contracts",
   "version": "0.1.0",
   "scripts": {
     "compile": "hardhat compile",

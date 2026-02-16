@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Admin Dashboard Components
+// DraftCrypto — Admin Dashboard Components
 // ═══════════════════════════════════════════════════════
 
 'use client';

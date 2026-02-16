@@ -26,9 +26,9 @@ const buttonStyles: Record<ButtonVariant, string> = {
 };
 
 const buttonSizes = {
-  sm: 'px-4 py-2 text-xs',
-  md: 'px-5 py-3 text-sm',
-  lg: 'px-8 py-4 text-sm',
+  sm: 'px-3 py-1.5 text-3xs',
+  md: 'px-4 py-2.5 text-2xs',
+  lg: 'px-6 py-3.5 text-xs',
 };
 
 export function Button({ variant = 'primary', size = 'md', loading, className, children, disabled, ...props }: ButtonProps) {
@@ -117,18 +117,18 @@ export function TradeModeBadge({ mode }: { mode: 'live' | 'paper' }) {
 export function MatchTypeBadge({ type, duration }: { type: 'fast' | 'full'; duration: string }) {
   return (
     <div className={cn(
-      'flex flex-col items-center px-3 py-2 min-w-[56px] border rounded-lg',
+      'flex flex-col items-center px-2 py-1 min-w-[52px] border',
       type === 'fast'
         ? 'bg-fc-gold-glow border-fc-gold/20'
         : 'bg-fc-green-glow border-fc-border-green'
     )}>
       <span className={cn(
-        'text-[10px] font-bold tracking-wider',
+        'text-3xs font-bold tracking-wider',
         type === 'fast' ? 'text-fc-gold' : 'text-fc-green'
       )}>
         {type === 'fast' ? 'FAST' : 'FULL'}
       </span>
-      <span className="text-base font-bold text-fc-text">{duration}</span>
+      <span className="text-xs font-bold text-fc-text">{duration}</span>
     </div>
   );
 }
@@ -163,9 +163,9 @@ export function Card({ children, className, hover, accent, onClick }: CardProps)
 
 export function SectionTitle({ children, right }: { children: ReactNode; right?: ReactNode }) {
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-2">
       <span className="fc-section-title">{children}</span>
-      {right && <span className="text-xs text-fc-text-dim">{right}</span>}
+      {right && <span className="text-3xs text-fc-text-dim">{right}</span>}
     </div>
   );
 }
@@ -182,10 +182,10 @@ export function PnlDisplay({ value, size = 'md', showSign = true, glow = false }
   const formatted = `${showSign ? (isPositive ? '+' : '') : ''}${value.toFixed(2)}%`;
 
   const sizeStyles = {
-    sm: 'text-xs',
-    md: 'text-base',
-    lg: 'text-2xl',
-    xl: 'text-3xl',
+    sm: 'text-2xs',
+    md: 'text-sm',
+    lg: 'text-xl',
+    xl: 'text-2xl',
   };
 
   return (
@@ -211,10 +211,10 @@ export function PnlDollarDisplay({ value, size = 'md', glow = false }: {
   const formatted = `${isPositive ? '+' : ''}$${Math.abs(value).toFixed(2)}`;
 
   const sizeStyles = {
-    sm: 'text-xs',
-    md: 'text-base',
-    lg: 'text-2xl',
-    xl: 'text-3xl',
+    sm: 'text-2xs',
+    md: 'text-sm',
+    lg: 'text-xl',
+    xl: 'text-2xl',
   };
 
   return (
@@ -242,12 +242,12 @@ export function Timer({ seconds, warn = 10 }: { seconds: number; warn?: number }
   return (
     <div className="text-right">
       <div className={cn(
-        'text-4xl font-bold font-mono leading-none animate-count-down',
+        'text-3xl font-bold font-mono leading-none animate-count-down',
         isWarning ? 'text-fc-red fc-glow-red' : 'text-fc-green fc-glow-green',
       )}>
         {seconds}
       </div>
-      <div className="text-xs text-fc-text-dim tracking-widest-2">SECONDS</div>
+      <div className="text-3xs text-fc-text-dim tracking-widest-2">SECONDS</div>
     </div>
   );
 }
@@ -267,7 +267,7 @@ export function ProgressBar({ value, max = 100, variant = 'green' }: {
   };
 
   return (
-    <div className="h-1.5 bg-fc-border rounded-full overflow-hidden">
+    <div className="h-1 bg-fc-border rounded-full overflow-hidden">
       <div
         className={cn('h-full rounded-full bg-gradient-to-r transition-all duration-500', colors[variant])}
         style={{ width: `${pct}%` }}
@@ -283,7 +283,7 @@ export function PnlBar({ myPnl, oppPnl }: { myPnl: number; oppPnl: number }) {
   const myPct = total === 0 ? 50 : Math.max(5, Math.min(95, 50 + ((myPnl - oppPnl) / (total || 1)) * 40));
 
   return (
-    <div className="h-1.5 bg-fc-border rounded-full overflow-hidden">
+    <div className="h-1 bg-fc-border rounded-full overflow-hidden">
       <div
         className="h-full rounded-full bg-gradient-to-r from-fc-green to-fc-green-bright transition-all duration-500"
         style={{ width: `${myPct}%` }}
@@ -306,12 +306,12 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-fc-card border border-fc-border-green rounded-xl p-6 mx-4 max-w-md w-full animate-slide-up shadow-card-lg">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-fc-card border border-fc-border-green p-5 mx-4 max-w-md w-full animate-slide-up">
         {title && (
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="text-base font-bold">{title}</h3>
-            <button onClick={onClose} className="text-fc-text-dim hover:text-fc-text text-xl leading-none">×</button>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold">{title}</h3>
+            <button onClick={onClose} className="text-fc-text-dim hover:text-fc-text text-lg leading-none">×</button>
           </div>
         )}
         {children}
@@ -324,8 +324,8 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
 
 export function EmptyState({ message }: { message: string }) {
   return (
-    <div className="py-8 text-center border border-dashed border-fc-border rounded-lg">
-      <span className="text-sm text-fc-text-dim">{message}</span>
+    <div className="py-6 text-center border border-dashed border-fc-border">
+      <span className="text-3xs text-fc-text-dim">{message}</span>
     </div>
   );
 }
@@ -334,39 +334,24 @@ export function EmptyState({ message }: { message: string }) {
 
 export function Logo({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizes = {
-    sm: { hex: 'w-8 h-8', letters: 'text-[10px]', title: 'text-sm', sub: 'text-[9px]' },
-    md: { hex: 'w-9 h-9', letters: 'text-[11px]', title: 'text-base', sub: 'text-[10px]' },
-    lg: { hex: 'w-12 h-12', letters: 'text-sm', title: 'text-xl', sub: 'text-xs' },
+    sm: { icon: 'w-7 h-7 text-sm', title: 'text-xs', sub: 'text-3xs' },
+    md: { icon: 'w-8 h-8 text-base', title: 'text-sm', sub: 'text-3xs' },
+    lg: { icon: 'w-12 h-12 text-xl', title: 'text-base', sub: 'text-3xs' },
   };
   const s = sizes[size];
 
   return (
-    <div className="flex items-center gap-3">
-      {/* Hexagonal DC monogram */}
-      <div className={cn(s.hex, 'relative flex items-center justify-center')}>
-        <svg viewBox="0 0 40 40" className="absolute inset-0 w-full h-full">
-          <polygon
-            points="20,2 36,11 36,29 20,38 4,29 4,11"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-fc-green"
-          />
-          <polygon
-            points="20,2 36,11 36,29 20,38 4,29 4,11"
-            fill="currentColor"
-            className="text-fc-green/10"
-          />
-        </svg>
-        <span className={cn(s.letters, 'font-bold tracking-wider text-fc-green relative z-10')}>DC</span>
+    <div className="flex items-center gap-2.5">
+      <div className={cn(
+        s.icon,
+        'rounded-full border-2 border-fc-green flex items-center justify-center',
+        'font-display italic text-fc-green font-bold shadow-green-glow',
+      )}>
+        F
       </div>
       <div>
-        <div className={cn(s.title, 'font-bold tracking-widest text-fc-text')}>
-          DRAFT<span className="text-fc-green">CRYPTO</span>
-        </div>
-        <div className={cn(s.sub, 'tracking-widest-2 text-fc-text-dim')}>
-          DRAFT · TRADE · WIN
-        </div>
+        <div className={cn(s.title, 'font-bold tracking-widest text-fc-text')}>DRAFTCRYPTO</div>
+        <div className={cn(s.sub, 'tracking-widest-3 text-fc-text-dim -mt-0.5')}>CHANGE YOUR REALITY</div>
       </div>
     </div>
   );

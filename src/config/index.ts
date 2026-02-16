@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Configuration
+// DraftCrypto — Configuration
 // ═══════════════════════════════════════════════════════
 
 // ── Chain Config ──

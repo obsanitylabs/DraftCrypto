@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto Server — Leaderboard + UNITE Routes
+// DraftCrypto Server — Leaderboard + UNITE Routes
 // ═══════════════════════════════════════════════════════
 
 import { FastifyInstance } from 'fastify';

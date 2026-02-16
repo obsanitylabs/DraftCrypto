@@ -27,8 +27,18 @@ export default function AdminPage() {
   const [tab, setTab] = useState<AdminTab>('overview');
 
   // Admin access check (client-side — real check is on backend)
-  // In production, check against ADMIN_WALLETS env var
-  const isAdmin = isConnected; // TODO: check wallet against admin list
+  // Admin wallet check — hardcoded + env var override
+  const adminWallets = [
+    '0x8000102c458701c1740c480893da4ab828aa86d8', // Aaron
+    ...(process.env.NEXT_PUBLIC_ADMIN_WALLET || '')
+      .toLowerCase()
+      .split(',')
+      .map(w => w.trim())
+      .filter(Boolean),
+  ];
+
+  const isAdmin = isConnected && user?.walletAddress &&
+    adminWallets.includes(user.walletAddress.toLowerCase());
 
   if (!isConnected) {
     return (

@@ -1,10 +1,10 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto Server — Auth Middleware
+// DraftCrypto Server — Auth Middleware
 // ═══════════════════════════════════════════════════════
 
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ethers } from 'ethers';
-import { prisma, logger } from '../lib/index.js';
+import { logger } from '../lib/index.js';
 
 export interface AuthUser {
   id: string;
@@ -43,5 +43,5 @@ export function verifyWalletSignature(
 
 // Generate nonce message for wallet to sign
 export function generateAuthMessage(nonce: string): string {
-  return `Sign this message to authenticate with Fantasy Crypto.\n\nNonce: ${nonce}`;
+  return `Sign this message to authenticate with DraftCrypto.\n\nNonce: ${nonce}`;
 }

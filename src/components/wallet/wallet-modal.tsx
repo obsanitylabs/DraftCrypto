@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Wallet Connection Modal
+// DraftCrypto — Wallet Connection Modal
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -16,6 +16,7 @@ import {
 } from 'wagmi';
 import { arbitrum } from 'wagmi/chains';
 import { useAuthStore } from '@/stores';
+import { api, setAuthToken } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 // ── Wallet metadata ──
@@ -49,7 +50,7 @@ const WALLETS: WalletOption[] = [
     id: 'phantom',
     name: 'Phantom',
     icon: '👻',
-    description: 'Solana & EVM wallet',
+    description: 'EVM wallet',
     connectorId: 'injected',
   },
 ];
@@ -161,27 +162,56 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   // ── Sign nonce for backend auth ──
   const performAuth = useCallback(async (walletAddress: string) => {
     try {
-      // Generate nonce (in production, fetch from backend)
-      const nonce = crypto.randomUUID();
-      const message = `Sign this message to authenticate with Fantasy Crypto.\n\nNonce: ${nonce}`;
+      const walletType = (selectedWallet?.id || 'metamask') as 'metamask' | 'walletconnect' | 'phantom';
+
+      // FIX: Call real backend API instead of generating local nonce
+      let nonce: string;
+      let message: string;
+
+      try {
+        // Try backend auth flow
+        const nonceRes = await api.auth.getNonce(walletAddress);
+        nonce = nonceRes.nonce;
+        message = nonceRes.message;
+      } catch (apiErr) {
+        // Fallback: generate local nonce if backend is unavailable (dev mode)
+        console.warn('Backend unavailable, falling back to local auth');
+        nonce = crypto.randomUUID();
+        message = `Sign this message to authenticate with DraftCrypto.\n\nNonce: ${nonce}`;
+      }
 
       const signature = await signMessageAsync({ message });
 
-      // In production: POST to /api/auth/login with { walletAddress, signature, nonce }
-      // For now, create local user session
-      authConnect({
-        id: walletAddress,
-        walletAddress,
-        walletType: (selectedWallet?.id || 'metamask') as 'metamask' | 'walletconnect' | 'phantom',
-        ensName: undefined,
-        xHandle: undefined,
-        tgHandle: undefined,
-        preferredTradeMode: 'paper',
-        uniteTier: 'none',
-        uniteBalance: 0,
-        uniteStaked: 0,
-        createdAt: new Date().toISOString(),
-      });
+      // FIX: Try backend login, fallback to local session if backend unavailable
+      let user: any;
+      try {
+        const loginRes = await api.auth.login({
+          walletAddress,
+          signature,
+          nonce,
+          walletType,
+        });
+        setAuthToken(loginRes.token);
+        user = loginRes.user;
+      } catch (apiErr) {
+        // Fallback: create local user session (paper mode preview)
+        console.warn('Backend login unavailable, creating local session');
+        user = {
+          id: walletAddress,
+          walletAddress,
+          walletType,
+          ensName: undefined,
+          xHandle: undefined,
+          tgHandle: undefined,
+          preferredTradeMode: 'paper',
+          uniteTier: 'none',
+          uniteBalance: 0,
+          uniteStaked: 0,
+          createdAt: new Date().toISOString(),
+        };
+      }
+
+      authConnect(user);
 
       setStep('success');
       setConnecting(false);
@@ -238,7 +268,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           {/* ── Step: Select Wallet ── */}
           {step === 'select' && (
             <div className="space-y-2">
-              <p className="text-3xs text-fc-text-dim tracking-wider mb-4">
+              <p className="text-xs text-fc-text-dim tracking-wider mb-4">
                 Connect your wallet to start drafting and trading on Arbitrum.
               </p>
 
@@ -266,7 +296,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                         </span>
                       )}
                     </div>
-                    <span className="text-3xs text-fc-text-dim tracking-wider">
+                    <span className="text-xs text-fc-text-dim tracking-wider">
                       {wallet.description}
                     </span>
                   </div>
@@ -277,9 +307,9 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               ))}
 
               <div className="pt-3 border-t border-fc-border mt-4">
-                <div className="flex items-center gap-2 text-3xs text-fc-text-dim tracking-wider">
+                <div className="flex items-center gap-2 text-xs text-fc-text-dim tracking-wider">
                   <span className="w-2 h-2 rounded-full bg-fc-green/50" />
-                  <span>Arbitrum One · ETH for gas · USDC for wagers</span>
+                  <span>Arbitrum One · ETH for gas · Paper mode preview</span>
                 </div>
               </div>
             </div>
@@ -293,14 +323,14 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <p className="text-xs font-mono tracking-wider text-fc-text">
                   Opening {selectedWallet.name}...
                 </p>
-                <p className="text-3xs text-fc-text-dim tracking-wider mt-2">
+                <p className="text-xs text-fc-text-dim tracking-wider mt-2">
                   Confirm the connection in your wallet
                 </p>
               </div>
               <LoadingDots />
               <button
                 onClick={handleRetry}
-                className="text-3xs text-fc-text-dim hover:text-fc-text underline tracking-wider"
+                className="text-xs text-fc-text-dim hover:text-fc-text underline tracking-wider"
               >
                 Cancel
               </button>
@@ -315,8 +345,8 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <p className="text-xs font-mono tracking-wider text-fc-text">
                   Wrong Network
                 </p>
-                <p className="text-3xs text-fc-text-dim tracking-wider mt-2">
-                  Fantasy Crypto runs on Arbitrum One.
+                <p className="text-xs text-fc-text-dim tracking-wider mt-2">
+                  DraftCrypto runs on Arbitrum One.
                   <br />Switch networks to continue.
                 </p>
               </div>
@@ -331,7 +361,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
               </button>
               <button
                 onClick={handleRetry}
-                className="text-3xs text-fc-text-dim hover:text-fc-text underline tracking-wider"
+                className="text-xs text-fc-text-dim hover:text-fc-text underline tracking-wider"
               >
                 Use a different wallet
               </button>
@@ -346,7 +376,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <p className="text-xs font-mono tracking-wider text-fc-text">
                   Sign to Authenticate
                 </p>
-                <p className="text-3xs text-fc-text-dim tracking-wider mt-2">
+                <p className="text-xs text-fc-text-dim tracking-wider mt-2">
                   Sign a message in your wallet to verify ownership.
                   <br />This doesn&apos;t cost any gas.
                 </p>
@@ -363,11 +393,11 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <p className="text-xs font-mono tracking-wider text-fc-green">
                   CONNECTED
                 </p>
-                <p className="text-3xs text-fc-text-dim tracking-wider mt-2 font-mono">
+                <p className="text-xs text-fc-text-dim tracking-wider mt-2 font-mono">
                   {address.slice(0, 6)}...{address.slice(-4)}
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-2 text-3xs text-fc-text-dim tracking-wider">
+              <div className="flex items-center justify-center gap-2 text-xs text-fc-text-dim tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-fc-green animate-pulse" />
                 <span>Arbitrum One</span>
               </div>
@@ -382,7 +412,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 <p className="text-xs font-mono tracking-wider text-red-400">
                   CONNECTION FAILED
                 </p>
-                <p className="text-3xs text-fc-text-dim tracking-wider mt-2 max-w-xs mx-auto">
+                <p className="text-xs text-fc-text-dim tracking-wider mt-2 max-w-xs mx-auto">
                   {error || 'Something went wrong. Please try again.'}
                 </p>
               </div>
@@ -419,6 +449,7 @@ export function AccountPopover({ isOpen, onClose }: AccountPopoverProps) {
   const handleDisconnect = () => {
     disconnect();
     authDisconnect();
+    setAuthToken(null);
     onClose();
   };
 
@@ -440,7 +471,7 @@ export function AccountPopover({ isOpen, onClose }: AccountPopoverProps) {
         <div className="p-4 border-b border-fc-border">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-fc-green animate-pulse" />
-            <span className="text-3xs text-fc-green font-mono tracking-wider">CONNECTED</span>
+            <span className="text-xs text-fc-green font-mono tracking-wider">CONNECTED</span>
           </div>
           <button
             onClick={handleCopyAddress}
@@ -450,16 +481,16 @@ export function AccountPopover({ isOpen, onClose }: AccountPopoverProps) {
             {address.slice(0, 6)}...{address.slice(-4)}
           </button>
           {user?.ensName && (
-            <p className="text-3xs text-fc-text-dim font-mono tracking-wider mt-1">
+            <p className="text-xs text-fc-text-dim font-mono tracking-wider mt-1">
               {user.ensName}
             </p>
           )}
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-3xs text-fc-text-dim tracking-wider">
+            <span className="text-xs text-fc-text-dim tracking-wider">
               {connector?.name || 'Wallet'}
             </span>
-            <span className="text-3xs text-fc-text-dim">·</span>
-            <span className="text-3xs text-fc-text-dim tracking-wider">Arbitrum</span>
+            <span className="text-xs text-fc-text-dim">·</span>
+            <span className="text-xs text-fc-text-dim tracking-wider">Arbitrum</span>
           </div>
         </div>
 
@@ -469,21 +500,21 @@ export function AccountPopover({ isOpen, onClose }: AccountPopoverProps) {
             href={`https://arbiscan.io/address/${address}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3 py-2 text-3xs font-mono tracking-wider text-fc-text-muted hover:text-fc-text hover:bg-fc-bg transition-colors w-full"
+            className="flex items-center gap-2 px-3 py-2 text-xs font-mono tracking-wider text-fc-text-muted hover:text-fc-text hover:bg-fc-bg transition-colors w-full"
           >
             <span>↗</span>
             <span>VIEW ON ARBISCAN</span>
           </a>
           <button
             onClick={handleCopyAddress}
-            className="flex items-center gap-2 px-3 py-2 text-3xs font-mono tracking-wider text-fc-text-muted hover:text-fc-text hover:bg-fc-bg transition-colors w-full text-left"
+            className="flex items-center gap-2 px-3 py-2 text-xs font-mono tracking-wider text-fc-text-muted hover:text-fc-text hover:bg-fc-bg transition-colors w-full text-left"
           >
             <span>📋</span>
             <span>COPY ADDRESS</span>
           </button>
           <button
             onClick={handleDisconnect}
-            className="flex items-center gap-2 px-3 py-2 text-3xs font-mono tracking-wider text-red-400 hover:text-red-300 hover:bg-fc-bg transition-colors w-full text-left"
+            className="flex items-center gap-2 px-3 py-2 text-xs font-mono tracking-wider text-red-400 hover:text-red-300 hover:bg-fc-bg transition-colors w-full text-left"
           >
             <span>⏻</span>
             <span>DISCONNECT</span>

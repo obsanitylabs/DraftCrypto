@@ -13,7 +13,7 @@ async function main() {
   const isMainnet = network.name === "arbitrum";
 
   console.log("═══════════════════════════════════════════");
-  console.log("Fantasy Crypto — Contract Deployment");
+  console.log("DraftCrypto — Contract Deployment");
   console.log("═══════════════════════════════════════════");
   console.log(`Network:  ${network.name}`);
   console.log(`Deployer: ${deployer.address}`);

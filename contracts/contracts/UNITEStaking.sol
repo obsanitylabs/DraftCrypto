@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /// @title UNITEStaking
-/// @notice Stake UNITE tokens to unlock tier-gated features in Fantasy Crypto.
+/// @notice Stake UNITE tokens to unlock tier-gated features in DraftCrypto.
 ///         Tiers: Fun (1K), Serious (10K), Whale (100K).
 ///         7-day cooldown on unstake to prevent tier-gaming.
 ///         Tier queries are on-chain so the Vault and other contracts can check.

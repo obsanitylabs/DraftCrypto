@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Caveat:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,13 +6,13 @@
 
 @layer base {
   :root {
-    --fc-bg: #060807;
-    --fc-card: #0d100d;
-    --fc-text: #eaeee8;
-    --fc-green: #4ade80;
-    --fc-green-dark: #166534;
-    --fc-gold: #fbbf24;
-    --fc-red: #f87171;
+    --fc-bg: #080a08;
+    --fc-card: #0f120f;
+    --fc-text: #e8e8e2;
+    --fc-green: #adf0c7;
+    --fc-green-dark: #2d6a3f;
+    --fc-gold: #ffdc4a;
+    --fc-red: #ff4d4d;
   }
 
   html {
@@ -26,19 +26,19 @@
 
   /* Scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   ::-webkit-scrollbar-track {
     background: var(--fc-bg);
   }
   ::-webkit-scrollbar-thumb {
     background: var(--fc-green-dark);
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   /* Selection */
   ::selection {
-    background: rgba(74, 222, 128, 0.25);
+    background: rgba(173, 240, 199, 0.2);
     color: var(--fc-text);
   }
 }
@@ -46,25 +46,25 @@
 @layer components {
   /* Cards */
   .fc-card {
-    @apply bg-fc-card border border-fc-border rounded-lg;
+    @apply bg-fc-card border border-fc-border;
   }
 
   .fc-card-hover {
-    @apply fc-card transition-all duration-200 hover:bg-fc-hover hover:border-fc-border-light hover:shadow-card;
+    @apply fc-card transition-colors duration-150 hover:bg-fc-hover;
   }
 
   .fc-card-green {
-    @apply bg-fc-green-glow border border-fc-border-green rounded-lg;
+    @apply bg-fc-green-glow border border-fc-border-green;
   }
 
   /* Buttons */
   .fc-btn {
-    @apply font-mono text-xs font-semibold tracking-wider cursor-pointer transition-all duration-200 rounded-md;
+    @apply font-mono text-2xs font-semibold tracking-widest cursor-pointer transition-all duration-150;
   }
 
   .fc-btn-primary {
     @apply fc-btn bg-fc-green text-fc-bg border-none shadow-green-glow
-           hover:shadow-green-glow-lg hover:brightness-110 active:scale-[0.98];
+           hover:shadow-green-glow-lg active:scale-[0.98];
   }
 
   .fc-btn-secondary {
@@ -84,11 +84,11 @@
 
   /* Badges */
   .fc-badge {
-    @apply inline-flex items-center px-2.5 py-1 text-[10px] font-semibold tracking-wider border rounded-md;
+    @apply inline-flex items-center px-2 py-0.5 text-3xs font-semibold tracking-wider border;
   }
 
   .fc-badge-green {
-    @apply fc-badge border-fc-green/20 text-fc-green bg-fc-green-glow;
+    @apply fc-badge border-fc-border-green text-fc-green bg-fc-green-glow;
   }
 
   .fc-badge-gold {
@@ -105,13 +105,13 @@
 
   /* Section titles */
   .fc-section-title {
-    @apply text-xs font-semibold tracking-widest-2 text-fc-text-muted uppercase;
+    @apply text-3xs font-semibold tracking-widest-2 text-fc-text-muted uppercase;
   }
 
   /* Inputs */
   .fc-input {
-    @apply bg-fc-bg border border-fc-border text-fc-text font-mono text-sm
-           px-4 py-3 rounded-md outline-none transition-colors
+    @apply bg-fc-bg border border-fc-border text-fc-text font-mono text-2xs
+           px-3 py-2 outline-none transition-colors
            focus:border-fc-border-green focus:ring-1 focus:ring-fc-green/20;
   }
 
@@ -127,34 +127,19 @@
   /* Green accent line (top of cards) */
   .fc-accent-top {
     @apply relative before:absolute before:top-0 before:left-0 before:right-0
-           before:h-[2px] before:bg-gradient-to-r before:from-fc-green/60 before:via-fc-green before:to-fc-green/60
-           before:rounded-t-lg;
+           before:h-[2px] before:bg-gradient-to-r before:from-fc-green before:via-fc-green-bright before:to-fc-green;
   }
 
   /* Glow text */
   .fc-glow-green {
-    text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+    text-shadow: 0 0 12px rgba(173, 240, 199, 0.3);
   }
 
   .fc-glow-red {
-    text-shadow: 0 0 20px rgba(248, 113, 113, 0.4);
+    text-shadow: 0 0 12px rgba(255, 77, 77, 0.3);
   }
 
   .fc-glow-gold {
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
-  }
-
-  /* Gradient text */
-  .fc-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-fc-green via-fc-green-bright to-fc-gold;
-    background-size: 200% 200%;
-  }
-
-  /* Subtle grid background */
-  .fc-grid-bg {
-    background-image:
-      linear-gradient(rgba(74, 222, 128, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 222, 128, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    text-shadow: 0 0 12px rgba(255, 220, 74, 0.3);
   }
 }

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Socket.io React Hooks
+// DraftCrypto — Socket.io React Hooks
 // ═══════════════════════════════════════════════════════
 
 'use client';

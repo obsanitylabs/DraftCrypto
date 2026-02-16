@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Match View (Live PnL Tracking)
+// DraftCrypto — Match View (Live PnL Tracking)
 // ═══════════════════════════════════════════════════════
 
 'use client';

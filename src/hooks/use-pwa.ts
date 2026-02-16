@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — PWA Service Worker Registration
+// DraftCrypto — PWA Service Worker Registration
 // ═══════════════════════════════════════════════════════
 
 'use client';

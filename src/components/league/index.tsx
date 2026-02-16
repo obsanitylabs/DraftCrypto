@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — League Components
+// DraftCrypto — League Components
 // ═══════════════════════════════════════════════════════
 
 'use client';

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Share Match Result Card
+// DraftCrypto — Share Match Result Card
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -62,7 +62,7 @@ export function ShareCard({ data }: { data: ShareMatchData }) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono tracking-widest font-bold text-fc-text">
-            FANTASY CRYPTO
+            DRAFTCRYPTO
           </span>
         </div>
         <span className="text-[9px] font-mono tracking-widest text-fc-text-dim">
@@ -164,7 +164,7 @@ export function ShareCard({ data }: { data: ShareMatchData }) {
       {/* Footer CTA */}
       <div className="mt-4 text-center">
         <div className="text-[9px] font-mono tracking-widest text-fc-text-dim">
-          fantasycrypto.gg — Draft. Trade. Compete.
+          draftcrypto.com — Draft. Trade. Compete.
         </div>
       </div>
     </div>
@@ -182,15 +182,15 @@ export function ShareActions({ data, referralCode }: ShareActionsProps) {
   const [copied, setCopied] = useState(false);
 
   const shareUrl = referralCode
-    ? `https://fantasycrypto.gg/?ref=${referralCode}`
-    : 'https://fantasycrypto.gg';
+    ? `https://draftcrypto.com/?ref=${referralCode}`
+    : 'https://draftcrypto.com';
 
   const pnlText = data.myPnl >= 0 ? `+${data.myPnl.toFixed(2)}%` : `${data.myPnl.toFixed(2)}%`;
   const resultEmoji = data.result === 'win' ? '🏆' : data.result === 'loss' ? '😤' : '🤝';
   const modeTag = data.tradeMode === 'live' ? '🟢' : '📄';
 
   const shareText = [
-    `${resultEmoji} ${data.result === 'win' ? 'Won' : data.result === 'loss' ? 'Lost' : 'Drew'} a Fantasy Crypto ${data.matchType === 'fast' ? 'Fast Match' : 'Full Draft'}! ${modeTag}`,
+    `${resultEmoji} ${data.result === 'win' ? 'Won' : data.result === 'loss' ? 'Lost' : 'Drew'} a DraftCrypto ${data.matchType === 'fast' ? 'Fast Match' : 'Full Draft'}! ${modeTag}`,
     ``,
     `📊 My PnL: ${pnlText}`,
     `👤 vs ${data.opponentEns || shortenAddress(data.opponentAddress)}: ${data.opponentPnl >= 0 ? '+' : ''}${data.opponentPnl.toFixed(2)}%`,
@@ -213,7 +213,7 @@ export function ShareActions({ data, referralCode }: ShareActionsProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Fantasy Crypto — ${data.result === 'win' ? 'Victory' : 'Match Result'}`,
+          title: `DraftCrypto — ${data.result === 'win' ? 'Victory' : 'Match Result'}`,
           text: shareText,
           url: shareUrl,
         });

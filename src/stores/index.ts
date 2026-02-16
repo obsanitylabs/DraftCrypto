@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Zustand Stores
+// DraftCrypto — Zustand Stores
 // ═══════════════════════════════════════════════════════
 
 import { create } from 'zustand';

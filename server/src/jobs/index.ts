@@ -1,22 +1,31 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto Server — BullMQ Jobs
+// DraftCrypto Server — BullMQ Jobs (with fallback polling)
 // ═══════════════════════════════════════════════════════
 
 import { Queue, Worker, Job } from 'bullmq';
 import { Server as SocketServer } from 'socket.io';
-import { redis, prisma, logger } from '../lib/index.js';
+import { redis, prisma, isRedisAvailable, logger } from '../lib/index.js';
 import { tradeService } from '../services/trade.js';
 import { settlementService } from '../services/settlement.js';
 
-// ── Queue Definitions ──
-export const pnlQueue = new Queue('pnl-updates', { connection: redis });
-export const settlementQueue = new Queue('settlement', { connection: redis });
-export const leaderboardQueue = new Queue('leaderboard', { connection: redis });
+// Queue definitions (only used when Redis available)
+let pnlQueue: Queue | null = null;
+let settlementQueue: Queue | null = null;
+let leaderboardQueue: Queue | null = null;
 
-// ── Start Workers ──
+// ── Start Workers (BullMQ — requires Redis) ──
 export function startWorkers(io: SocketServer) {
+  if (!isRedisAvailable()) {
+    logger.info('No Redis — starting fallback polling for PnL, settlement, and stale cleanup');
+    startFallbackPolling(io);
+    return;
+  }
+
+  pnlQueue = new Queue('pnl-updates', { connection: redis });
+  settlementQueue = new Queue('settlement', { connection: redis });
+  leaderboardQueue = new Queue('leaderboard', { connection: redis });
+
   // ═══ PnL Update Worker ═══
-  // Runs every 60s for active paper matches, broadcasts to match rooms
   const pnlWorker = new Worker('pnl-updates', async (job: Job) => {
     const { matchId } = job.data;
 
@@ -27,48 +36,40 @@ export function startWorkers(io: SocketServer) {
 
     if (!match || match.status !== 'active') return;
 
-    // Calculate PnL for each player
     const pnlResults: Record<string, { totalPnl: number; positions: any[] }> = {};
 
     for (const player of match.players) {
       const result = await tradeService.calculatePnl(matchId, player.userId);
       pnlResults[player.userId] = result;
 
-      // Update match player PnL
       await prisma.matchPlayer.update({
         where: { matchId_userId: { matchId, userId: player.userId } },
         data: { totalPnl: result.totalPnl },
       });
-
-      // Snapshot for history
-      await prisma.pnlSnapshot.create({
-        data: {
-          time: new Date(),
-          matchId,
-          userId: player.userId,
-          totalPnl: result.totalPnl,
-        },
-      });
     }
 
     // Broadcast to match room
-    const roomId = `match:${matchId}`;
-    for (const player of match.players) {
-      const opponent = match.players.find(p => p.userId !== player.userId);
-      const myPnl = pnlResults[player.userId];
-      const oppPnl = opponent ? pnlResults[opponent.userId] : null;
+    io.to(`match:${matchId}`).emit('pnl_update', {
+      matchId,
+      pnl: pnlResults,
+    });
 
-      // Emit personalized PnL to each player's socket
-      io.to(roomId).emit('pnl_update', {
-        matchId,
-        players: match.players.map(p => ({
-          userId: p.userId,
-          totalPnl: pnlResults[p.userId]?.totalPnl || 0,
-          positions: pnlResults[p.userId]?.positions || [],
-        })),
-      });
+    // Snapshot PnL (for charts)
+    const now = new Date();
+    for (const player of match.players) {
+      const result = pnlResults[player.userId];
+      if (result) {
+        await prisma.pnlSnapshot.create({
+          data: {
+            time: now,
+            matchId,
+            userId: player.userId,
+            totalPnl: result.totalPnl,
+          },
+        }).catch(() => {}); // ignore duplicate key
+      }
     }
-  }, { connection: redis, concurrency: 10 });
+  }, { connection: redis, concurrency: 5 });
 
   // ═══ Settlement Worker ═══
   const settlementWorker = new Worker('settlement', async (job: Job) => {
@@ -76,90 +77,114 @@ export function startWorkers(io: SocketServer) {
       await settlementService.processExpiredMatches();
     } else if (job.name === 'settle-match') {
       await settlementService.settleMatch(job.data.matchId);
-    }
-  }, { connection: redis, concurrency: 5 });
-
-  // ═══ Leaderboard Worker ═══
-  const leaderboardWorker = new Worker('leaderboard', async (job: Job) => {
-    // Recalculate weekly leaderboard and distribute UNITE rewards
-    if (job.name === 'weekly-rewards') {
-      logger.info('Processing weekly leaderboard rewards');
-
-      const oneWeekAgo = new Date(Date.now() - 7 * 86400_000);
-      const topPlayers = await prisma.matchPlayer.groupBy({
-        by: ['userId'],
-        where: {
-          isWinner: true,
-          match: { status: 'settled', createdAt: { gte: oneWeekAgo } },
-        },
-        _sum: { totalPnl: true },
-        orderBy: { _sum: { totalPnl: 'desc' } },
-        take: 10,
-      });
-
-      for (const [i, player] of topPlayers.entries()) {
-        const reward = i === 0 ? 2500 : i <= 2 ? 1500 : 500;
-        await prisma.uniteTransaction.create({
-          data: {
-            userId: player.userId,
-            type: 'earn_leaderboard',
-            amount: reward,
-          },
-        });
-      }
-
-      logger.info({ topPlayerCount: topPlayers.length }, 'Weekly rewards distributed');
+    } else if (job.name === 'cleanup-stale') {
+      await settlementService.cancelStaleMatches();
     }
   }, { connection: redis });
 
-  // ── Error handlers ──
-  for (const worker of [pnlWorker, settlementWorker, leaderboardWorker]) {
-    worker.on('failed', (job, err) => {
-      logger.error({ jobId: job?.id, err: err.message }, 'Job failed');
+  // ═══ Leaderboard Worker ═══
+  const leaderboardWorker = new Worker('leaderboard', async (job: Job) => {
+    const topPlayers = await prisma.matchPlayer.groupBy({
+      by: ['userId'],
+      where: { match: { status: 'settled' } },
+      _sum: { totalPnl: true },
+      _count: { matchId: true },
+      orderBy: { _sum: { totalPnl: 'desc' } },
+      take: 100,
     });
-  }
 
-  logger.info('BullMQ workers started');
+    logger.info({ count: topPlayers.length }, 'Leaderboard recalculated');
+  }, { connection: redis });
+
+  pnlWorker.on('failed', (job, err) => logger.error({ jobId: job?.id, err }, 'PnL job failed'));
+  settlementWorker.on('failed', (job, err) => logger.error({ jobId: job?.id, err }, 'Settlement job failed'));
 }
 
-// ── Schedule Recurring Jobs ──
+// ── Schedule Repeating Jobs (BullMQ) ──
 export async function scheduleJobs() {
+  if (!isRedisAvailable() || !settlementQueue || !leaderboardQueue) return;
+
   // Check for expired matches every 30 seconds
   await settlementQueue.add('check-expired', {}, {
     repeat: { every: 30_000 },
-    removeOnComplete: 100,
-    removeOnFail: 50,
-  });
-
-  // Weekly leaderboard rewards (Sunday midnight UTC)
-  await leaderboardQueue.add('weekly-rewards', {}, {
-    repeat: { pattern: '0 0 * * 0' }, // cron: every Sunday at 00:00
     removeOnComplete: 10,
   });
 
-  logger.info('Recurring jobs scheduled');
+  // Clean up stale matches every 5 minutes
+  await settlementQueue.add('cleanup-stale', {}, {
+    repeat: { every: 300_000 },
+    removeOnComplete: 5,
+  });
+
+  // Update leaderboard every 5 minutes
+  await leaderboardQueue.add('recalculate', {}, {
+    repeat: { every: 300_000 },
+    removeOnComplete: 5,
+  });
+
+  logger.info('Scheduled repeating jobs');
 }
 
-// ── Schedule PnL updates for a match ──
-export async function schedulePnlUpdates(matchId: string, intervalMs: number = 60_000) {
-  await pnlQueue.add(
-    `pnl:${matchId}`,
-    { matchId },
-    {
-      repeat: { every: intervalMs },
-      removeOnComplete: 100,
-      removeOnFail: 20,
-      jobId: `pnl-repeat:${matchId}`,
-    },
-  );
-}
-
-// ── Stop PnL updates for a match ──
-export async function stopPnlUpdates(matchId: string) {
-  const repeatableJobs = await pnlQueue.getRepeatableJobs();
-  for (const job of repeatableJobs) {
-    if (job.id === `pnl-repeat:${matchId}`) {
-      await pnlQueue.removeRepeatableByKey(job.key);
-    }
+// ── Enqueue PnL update for a match ──
+export async function enqueuePnlUpdate(matchId: string) {
+  if (pnlQueue) {
+    await pnlQueue.add('update-pnl', { matchId }, {
+      removeOnComplete: 5,
+      attempts: 2,
+    });
   }
+}
+
+// ── Fallback Polling (no Redis) ──
+function startFallbackPolling(io: SocketServer) {
+  // Poll for PnL updates every 60 seconds
+  setInterval(async () => {
+    try {
+      const activeMatches = await prisma.match.findMany({
+        where: { status: 'active' },
+        include: { players: true },
+      });
+
+      for (const match of activeMatches) {
+        const pnlResults: Record<string, any> = {};
+
+        for (const player of match.players) {
+          const result = await tradeService.calculatePnl(match.id, player.userId);
+          pnlResults[player.userId] = result;
+
+          await prisma.matchPlayer.update({
+            where: { matchId_userId: { matchId: match.id, userId: player.userId } },
+            data: { totalPnl: result.totalPnl },
+          });
+        }
+
+        io.to(`match:${match.id}`).emit('pnl_update', {
+          matchId: match.id,
+          pnl: pnlResults,
+        });
+      }
+    } catch (err) {
+      logger.error({ err }, 'Fallback PnL polling error');
+    }
+  }, 60_000);
+
+  // Poll for expired matches every 30 seconds
+  setInterval(async () => {
+    try {
+      await settlementService.processExpiredMatches();
+    } catch (err) {
+      logger.error({ err }, 'Fallback settlement polling error');
+    }
+  }, 30_000);
+
+  // Clean up stale matches every 5 minutes
+  setInterval(async () => {
+    try {
+      await settlementService.cancelStaleMatches();
+    } catch (err) {
+      logger.error({ err }, 'Fallback stale cleanup error');
+    }
+  }, 300_000);
+
+  logger.info('Fallback polling started (60s PnL, 30s settlement, 5m stale cleanup)');
 }

@@ -3,10 +3,10 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "DraftCrypto — Draft Altcoin Portfolios. Win Real USDC.",
+  title: "DraftCrypto — Draft. Trade. Compete.",
   description:
-    "Draft altcoin portfolios in live snake drafts. Trade alts vs alts. Compete head-to-head or in leagues. Win real USDC. Powered by Pear Protocol on Hyperliquid.",
-  keywords: ["crypto", "fantasy", "trading", "DeFi", "Pear Protocol", "Hyperliquid", "DraftCrypto", "altcoins"],
+    "Draft crypto portfolios in live snake drafts. Compete head-to-head or in leagues. Win real USDC wagers. Powered by Pear Protocol on Hyperliquid.",
+  keywords: ["crypto", "fantasy", "trading", "DeFi", "Pear Protocol", "Hyperliquid", "Arbitrum"],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -22,7 +22,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#060807",
+  themeColor: "#080a08",
 };
 
 export default function RootLayout({

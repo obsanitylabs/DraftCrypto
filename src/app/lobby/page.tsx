@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Lobby Page
+// DraftCrypto — Lobby Page
 // ═══════════════════════════════════════════════════════
 
 import { PageShell } from '@/components/layout';

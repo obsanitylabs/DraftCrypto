@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto Server — Match Routes
+// DraftCrypto Server — Match Routes
 // ═══════════════════════════════════════════════════════
 
 import { FastifyInstance } from 'fastify';
@@ -25,16 +25,48 @@ const SubmitLineupSchema = z.object({
   })),
 });
 
+// Rate limit config for mutation endpoints
+const mutationRateLimit = {
+  config: {
+    rateLimit: {
+      max: 10,
+      timeWindow: '1 minute',
+    },
+  },
+};
+
 export async function matchRoutes(app: FastifyInstance) {
   // ── Create match ──
-  app.post('/matches', { preHandler: authGuard }, async (request, reply) => {
+  app.post('/matches', {
+    preHandler: authGuard,
+    ...mutationRateLimit,
+  }, async (request, reply) => {
     const body = CreateMatchSchema.parse(request.body);
     const userId = request.user.id;
+
+    // Paper mode only for preview
+    if (body.tradeMode === 'live') {
+      return reply.code(400).send({
+        error: 'Live trading is not yet available. Paper mode only during preview.',
+      });
+    }
 
     const tierConfig = config.game.tiers[body.tier];
     if (!tierConfig) return reply.code(400).send({ error: 'Invalid tier' });
 
     const durationHours = config.game.durations[body.duration];
+
+    // Check if user already has too many active matches
+    const activeCount = await prisma.match.count({
+      where: {
+        status: { in: ['matching', 'drafting', 'lineup', 'active'] },
+        players: { some: { userId } },
+      },
+    });
+
+    if (activeCount >= 5) {
+      return reply.code(429).send({ error: 'Too many active matches. Complete or cancel existing matches first.' });
+    }
 
     const match = await prisma.match.create({
       data: {
@@ -57,7 +89,10 @@ export async function matchRoutes(app: FastifyInstance) {
   });
 
   // ── Join match ──
-  app.post('/matches/:matchId/join', { preHandler: authGuard }, async (request, reply) => {
+  app.post('/matches/:matchId/join', {
+    preHandler: authGuard,
+    ...mutationRateLimit,
+  }, async (request, reply) => {
     const { matchId } = z.object({ matchId: z.string().uuid() }).parse(request.params);
     const userId = request.user.id;
 
@@ -129,7 +164,10 @@ export async function matchRoutes(app: FastifyInstance) {
   });
 
   // ── Submit lineup (after draft) ──
-  app.post('/matches/:matchId/lineup', { preHandler: authGuard }, async (request, reply) => {
+  app.post('/matches/:matchId/lineup', {
+    preHandler: authGuard,
+    ...mutationRateLimit,
+  }, async (request, reply) => {
     const { matchId } = z.object({ matchId: z.string().uuid() }).parse(request.params);
     const body = SubmitLineupSchema.parse(request.body);
     const userId = request.user.id;
@@ -142,6 +180,16 @@ export async function matchRoutes(app: FastifyInstance) {
     if (!match) return reply.code(404).send({ error: 'Match not found' });
     if (match.status !== 'lineup' && match.status !== 'drafting') {
       return reply.code(400).send({ error: 'Not in lineup phase' });
+    }
+
+    // Verify each pick belongs to this user in this match
+    for (const pick of body.picks) {
+      const dbPick = await prisma.draftPick.findFirst({
+        where: { id: pick.pickId, matchId, userId },
+      });
+      if (!dbPick) {
+        return reply.code(400).send({ error: `Pick ${pick.pickId} does not belong to you` });
+      }
     }
 
     // Update each pick

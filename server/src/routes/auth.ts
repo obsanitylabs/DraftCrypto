@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto Server — Auth Routes
+// DraftCrypto Server — Auth Routes
 // ═══════════════════════════════════════════════════════
 
 import { FastifyInstance } from 'fastify';

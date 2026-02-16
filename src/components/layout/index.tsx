@@ -31,13 +31,13 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-fc-bg/90 backdrop-blur-xl border-b border-fc-border">
-        <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
+      <header className="sticky top-0 z-50 bg-fc-card/95 backdrop-blur-md border-b border-fc-border">
+        <div className="max-w-lg mx-auto flex items-center justify-between px-4 py-3">
           <Link href={isConnected ? '/lobby' : '/'}>
             <Logo size="sm" />
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             {isConnected && (
               <>
                 <NavLink href="/leaderboard" active={pathname === '/leaderboard'}>Stats</NavLink>
@@ -49,7 +49,7 @@ export function Header() {
             <button
               onClick={handleWalletClick}
               className={cn(
-                'ml-2 px-4 py-2 text-xs font-semibold tracking-wider font-mono transition-all rounded-md',
+                'ml-1 px-3 py-1.5 text-3xs font-semibold tracking-wider font-mono transition-all',
                 isConnected
                   ? 'bg-fc-green text-fc-bg'
                   : 'bg-transparent border border-fc-border-green text-fc-green hover:bg-fc-green-glow',
@@ -74,7 +74,7 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
     <Link
       href={href}
       className={cn(
-        'px-3 py-2 text-xs font-mono tracking-wider transition-colors rounded-md',
+        'px-2 py-1.5 text-3xs font-mono tracking-wider transition-colors',
         active ? 'bg-fc-green-glow text-fc-green' : 'text-fc-text-muted hover:text-fc-text',
       )}
     >
@@ -87,26 +87,23 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
 
 export function Footer() {
   return (
-    <footer className="border-t border-fc-border mt-12">
-      <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
+    <footer className="border-t border-fc-border px-4 py-6">
+      <div className="max-w-lg mx-auto space-y-4">
         {/* Links */}
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           <FooterLink href="/how-to-play">How to Play</FooterLink>
           <FooterLink href="/faq">FAQ</FooterLink>
           <FooterLink href="/history">Match History</FooterLink>
           <FooterLink href="/referral">Referrals</FooterLink>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
           <FooterLink href="/terms">Terms</FooterLink>
           <FooterLink href="/privacy">Privacy</FooterLink>
           <FooterLink href="/risk">Risk Disclosure</FooterLink>
         </div>
         {/* Branding */}
-        <div className="flex items-center justify-between text-xs text-fc-text-dim tracking-wider pt-4 border-t border-fc-border">
-          <div className="flex items-center gap-2">
-            <Logo size="sm" />
-            <span className="text-fc-text-dim ml-2">v0.1</span>
-          </div>
+        <div className="flex items-center justify-between text-3xs text-fc-text-dim tracking-wider pt-2 border-t border-fc-border">
+          <span>DRAFTCRYPTO v0.3</span>
           <span>ARBITRUM · PEAR PROTOCOL</span>
         </div>
       </div>
@@ -116,7 +113,7 @@ export function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} className="text-sm text-fc-text-dim hover:text-fc-green font-mono tracking-wider transition-colors">
+    <Link href={href} className="text-3xs text-fc-text-dim hover:text-fc-green font-mono tracking-wider transition-colors">
       {children}
     </Link>
   );
@@ -126,9 +123,9 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
 
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-fc-bg fc-grid-bg">
+    <div className="min-h-screen bg-fc-bg">
       <Header />
-      <main className="max-w-5xl mx-auto px-6 min-h-[calc(100vh-120px)]">
+      <main className="max-w-lg mx-auto border-x border-fc-border min-h-[calc(100vh-120px)]">
         {children}
       </main>
       <Footer />

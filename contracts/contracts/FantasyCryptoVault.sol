@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /// @title FantasyCryptoVault
-/// @notice Escrows USDC wagers for Fantasy Crypto H2H matches on Arbitrum.
+/// @notice Escrows USDC wagers for DraftCrypto H2H matches on Arbitrum.
 ///         Players deposit equal wagers. The backend settles matches by calling
 ///         settleMatch() with the winner address. 5% platform fee on the pot.
 ///         Supports cancellation (full refund) and draws (split pot minus fee).

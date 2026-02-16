@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Pear Protocol Service
+// DraftCrypto — Pear Protocol Service
 // ═══════════════════════════════════════════════════════
 
 import { PEAR, GAME } from '@/config';

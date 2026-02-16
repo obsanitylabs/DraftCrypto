@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Socket.io Client
+// DraftCrypto — Socket.io Client
 // ═══════════════════════════════════════════════════════
 
 import { io, Socket } from 'socket.io-client';

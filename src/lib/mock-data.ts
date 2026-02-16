@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Mock Token Data (for demo / development)
+// DraftCrypto — Mock Token Data (for demo / development)
 // ═══════════════════════════════════════════════════════
 
 import type { Token } from '@/types';

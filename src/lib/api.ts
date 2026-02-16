@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — API Client
+// DraftCrypto — API Client
 // ═══════════════════════════════════════════════════════
 
 import { API } from '@/config';
@@ -64,6 +64,18 @@ export const api = {
         method: 'PATCH',
         body: JSON.stringify(data),
       }),
+  },
+
+  // ── Tokens ──
+
+  tokens: {
+    list: () =>
+      request<{ tokens: Array<{ symbol: string; price: number }> }>('/tokens'),
+
+    prices: (symbols?: string[]) => {
+      const qs = symbols ? `?symbols=${symbols.join(',')}` : '';
+      return request<{ prices: Array<{ symbol: string; price: number }> }>(`/tokens/prices${qs}`);
+    },
   },
 
   // ── Matches ──
@@ -157,4 +169,8 @@ export const api = {
     rageQuit: (leagueId: string) =>
       request<{ success: boolean }>(`/leagues/${leagueId}/rage-quit`, { method: 'POST' }),
   },
+
+  // ── Health ──
+
+  health: () => request<{ status: string; version: string; mode: string }>('/health'),
 };

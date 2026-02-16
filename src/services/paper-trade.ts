@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Paper Trade Service
+// DraftCrypto — Paper Trade Service
 // ═══════════════════════════════════════════════════════
 
 import { pearService } from './pear';
@@ -141,45 +141,52 @@ class PaperTradeService {
 
   /**
    * Update all open positions with latest prices.
-   * Returns total weighted PnL % for the portfolio.
+   * Returns total weighted PnL % for the portfolio (normalized by total weight).
    */
   async updatePrices(): Promise<{
     positions: PaperPosition[];
     totalPnlPercent: number;
   }> {
-    const openPositions = Array.from(this.positions.values()).filter(p => p.isOpen);
-    if (openPositions.length === 0) return { positions: [], totalPnlPercent: 0 };
+    const allPositions = Array.from(this.positions.values());
+    const openPositions = allPositions.filter(p => p.isOpen);
 
-    // Fetch latest prices
-    const symbols = [...new Set(openPositions.map(p => p.tokenSymbol))];
-    const tokenData = await pearService.getMarketOverview(symbols);
+    if (allPositions.length === 0) return { positions: [], totalPnlPercent: 0 };
 
-    const priceMap = new Map<string, number>();
-    tokenData.forEach(t => priceMap.set(t.coin, t.markPrice));
+    // Fetch latest prices for open positions
+    if (openPositions.length > 0) {
+      const symbols = [...new Set(openPositions.map(p => p.tokenSymbol))];
+      const tokenData = await pearService.getMarketOverview(symbols);
 
+      const priceMap = new Map<string, number>();
+      tokenData.forEach(t => priceMap.set(t.coin, t.markPrice));
+
+      for (const pos of openPositions) {
+        const currentPrice = priceMap.get(pos.tokenSymbol) || pos.currentPrice;
+        pos.currentPrice = currentPrice;
+
+        const rawPnl = this.calculatePnlPercent(pos.entryPrice, currentPrice, pos.positionType);
+        const leveragedPnl = rawPnl * GAME.BASE_LEVERAGE * pos.boostMultiplier;
+        pos.pnlPercent = leveragedPnl;
+
+        // Check TP/SL
+        if (pos.tpPercent !== undefined && leveragedPnl >= pos.tpPercent) {
+          pos.isOpen = false;
+          pos.closedAt = new Date().toISOString();
+          pos.realizedPnlPercent = pos.tpPercent;
+        } else if (pos.slPercent !== undefined && leveragedPnl <= pos.slPercent) {
+          pos.isOpen = false;
+          pos.closedAt = new Date().toISOString();
+          pos.realizedPnlPercent = pos.slPercent;
+        }
+      }
+    }
+
+    // Calculate total weighted PnL (normalized — consistent with backend)
     let weightedPnlSum = 0;
     let totalWeight = 0;
 
-    for (const pos of openPositions) {
-      const currentPrice = priceMap.get(pos.tokenSymbol) || pos.currentPrice;
-      pos.currentPrice = currentPrice;
-
-      const rawPnl = this.calculatePnlPercent(pos.entryPrice, currentPrice, pos.positionType);
-      const leveragedPnl = rawPnl * GAME.BASE_LEVERAGE * pos.boostMultiplier;
-      pos.pnlPercent = leveragedPnl;
-
-      // Check TP/SL
-      if (pos.tpPercent !== undefined && leveragedPnl >= pos.tpPercent) {
-        pos.isOpen = false;
-        pos.closedAt = new Date().toISOString();
-        pos.realizedPnlPercent = pos.tpPercent;
-      } else if (pos.slPercent !== undefined && leveragedPnl <= pos.slPercent) {
-        pos.isOpen = false;
-        pos.closedAt = new Date().toISOString();
-        pos.realizedPnlPercent = pos.slPercent;
-      }
-
-      const effectivePnl = pos.isOpen ? leveragedPnl : (pos.realizedPnlPercent || 0);
+    for (const pos of allPositions) {
+      const effectivePnl = pos.isOpen ? pos.pnlPercent : (pos.realizedPnlPercent || 0);
       weightedPnlSum += effectivePnl * pos.weight;
       totalWeight += pos.weight;
     }
@@ -187,7 +194,7 @@ class PaperTradeService {
     const totalPnlPercent = totalWeight > 0 ? weightedPnlSum / totalWeight : 0;
 
     return {
-      positions: Array.from(this.positions.values()),
+      positions: allPositions,
       totalPnlPercent,
     };
   }

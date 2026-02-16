@@ -3,23 +3,22 @@
 import { SectionTitle, Card } from '@/components/ui';
 
 const STEPS = [
-  { n: '01', title: 'Connect', desc: 'Link wallet via WalletConnect or Phantom', icon: '🔗' },
-  { n: '02', title: 'Draft', desc: 'Pick tokens in a live snake draft (30s turns)', icon: '🎯' },
-  { n: '03', title: 'Compete', desc: 'Set Long/Short lineup and track live PnL', icon: '⚡' },
-  { n: '04', title: 'Win', desc: 'Beat your opponent, collect the pot + UNITE', icon: '🏆' },
+  { n: '01', title: 'Connect', desc: 'Link wallet via WalletConnect or Phantom' },
+  { n: '02', title: 'Draft', desc: 'Pick tokens in a live snake draft (30s turns)' },
+  { n: '03', title: 'Compete', desc: 'Set Long/Short lineup and track live PnL' },
+  { n: '04', title: 'Win', desc: 'Beat your opponent, collect the pot + UNITE' },
 ];
 
 export function LandingHowItWorks() {
   return (
-    <div className="mb-12" id="how-it-works">
+    <div className="mb-7">
       <SectionTitle>How It Works</SectionTitle>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 gap-1.5">
         {STEPS.map((s) => (
-          <Card key={s.n} className="p-5 group hover:border-fc-border-green transition-all duration-300">
-            <div className="text-2xl mb-3">{s.icon}</div>
-            <div className="text-3xl font-bold text-fc-green/20 mb-2 group-hover:text-fc-green/40 transition-colors">{s.n}</div>
-            <div className="text-sm font-bold mb-2">{s.title}</div>
-            <div className="text-sm text-fc-text-muted leading-relaxed">{s.desc}</div>
+          <Card key={s.n} className="p-3">
+            <div className="text-lg font-bold text-fc-green opacity-50 mb-1">{s.n}</div>
+            <div className="text-2xs font-bold mb-1">{s.title}</div>
+            <div className="text-3xs text-fc-text-muted leading-relaxed">{s.desc}</div>
           </Card>
         ))}
       </div>

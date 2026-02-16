@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Wagmi Configuration (Arbitrum)
+// DraftCrypto — Wagmi Configuration (Arbitrum)
 // ═══════════════════════════════════════════════════════
 
 import { http, createConfig } from 'wagmi';

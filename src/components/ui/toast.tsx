@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Toast Notification System
+// DraftCrypto — Toast Notification System
 // ═══════════════════════════════════════════════════════
 
 'use client';

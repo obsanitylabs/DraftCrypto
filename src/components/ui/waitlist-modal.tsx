@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Waitlist Email Catcher
+// DraftCrypto — Waitlist Email Catcher
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -36,20 +36,22 @@ export function WaitlistModal({ isOpen, onClose, referralCode }: WaitlistModalPr
     setErrorMsg('');
 
     try {
-      // In production: POST to /api/waitlist
-      // const res = await fetch('/api/waitlist', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, referralCode }),
-      // });
-      // const data = await res.json();
+      const res = await fetch('/.netlify/functions/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, referralCode, source: 'modal' }),
+      });
 
-      // Mock success
-      await new Promise(r => setTimeout(r, 800));
-      setPosition(Math.floor(Math.random() * 500) + 100);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to join');
+      }
+
+      const data = await res.json();
+      setPosition(data.position || Math.floor(Math.random() * 500) + 100);
       setStatus('success');
-    } catch {
-      setErrorMsg('Something went wrong. Try again.');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Something went wrong. Try again.');
       setStatus('error');
     }
   };
@@ -70,7 +72,7 @@ export function WaitlistModal({ isOpen, onClose, referralCode }: WaitlistModalPr
           {status !== 'success' ? (
             <div className="space-y-4">
               <p className="text-3xs text-fc-text-dim tracking-wider leading-relaxed">
-                Fantasy Crypto is in closed beta. Join the waitlist to get early access
+                DraftCrypto is in closed beta. Join the waitlist to get early access
                 and earn <span className="text-fc-gold font-semibold">100 UNITE</span> when
                 you sign up.
               </p>
@@ -166,7 +168,7 @@ export function WaitlistModal({ isOpen, onClose, referralCode }: WaitlistModalPr
 
 function ReferralCopy({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
-  const link = `https://fantasycrypto.gg?ref=${code}`;
+  const link = `https://draftcrypto.com?ref=${code}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(link);
