@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                        String    @id @default(uuid()) @db.Uuid
+  walletAddress             String    @unique @map("wallet_address")
+  walletType                String    @default("metamask") @map("wallet_type")
+  pearJwtEncrypted          String?   @map("pear_jwt_encrypted")
+  pearRefreshTokenEncrypted String?   @map("pear_refresh_token_encrypted")
+  pearAgentWallet           String?   @map("pear_agent_wallet")
+  pearAgentWalletExpiresAt  DateTime? @map("pear_agent_wallet_expires_at")
+  ensName                   String?   @map("ens_name")
+  xHandle                   String?   @map("x_handle")
+  tgHandle                  String?   @map("tg_handle")
+  preferredTradeMode        String    @default("paper") @map("preferred_trade_mode")
+  createdAt                 DateTime  @default(now()) @map("created_at")
+  updatedAt                 DateTime  @updatedAt @map("updated_at")
+
+  matchPlayers      MatchPlayer[]
+  draftPicks        DraftPick[]
+  wonMatches        Match[]              @relation("MatchWinner")
+  uniteTransactions UniteTransaction[]
+  watchlist         Watchlist[]
+  leagueMemberships LeagueMember[]
+
+  @@map("users")
+}
+
+model Match {
+  id              String    @id @default(uuid()) @db.Uuid
+  matchType       String    @default("full") @map("match_type")
+  tradeMode       String    @map("trade_mode")
+  mode            String
+  tier            String
+  status          String    @default("matching")
+  wagerAmountUsdc Decimal?  @map("wager_amount_usdc")
+  vaultMatchId    String?   @map("vault_match_id")
+  draftStartTime  DateTime? @map("draft_start_time")
+  matchStartTime  DateTime? @map("match_start_time")
+  matchEndTime    DateTime? @map("match_end_time")
+  durationHours   Int       @default(24) @map("duration_hours")
+  winnerId        String?   @map("winner_id") @db.Uuid
+  leagueId        String?   @map("league_id") @db.Uuid
+  leagueWeek      Int?      @map("league_week")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  winner   User?   @relation("MatchWinner", fields: [winnerId], references: [id])
+  league   League? @relation(fields: [leagueId], references: [id])
+  players  MatchPlayer[]
+  picks    DraftPick[]
+  schedule LeagueSchedule[]
+  uniteTxs UniteTransaction[]
+
+  @@map("matches")
+}
+
+model MatchPlayer {
+  matchId    String  @map("match_id") @db.Uuid
+  userId     String  @map("user_id") @db.Uuid
+  draftOrder Int     @map("draft_order")
+  totalPnl   Decimal @default(0) @map("total_pnl")
+  isWinner   Boolean @default(false) @map("is_winner")
+
+  match Match @relation(fields: [matchId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@id([matchId, userId])
+  @@map("match_players")
+}
+
+model DraftPick {
+  id              String    @id @default(uuid()) @db.Uuid
+  matchId         String    @map("match_id") @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  tokenSymbol     String    @map("token_symbol")
+  pickRound       Int       @map("pick_round")
+  pickOrder       Int       @map("pick_order")
+  weight          Decimal
+  positionType    String?   @map("position_type")
+  boostMultiplier Int       @default(1) @map("boost_multiplier")
+  pearPositionId  String?   @map("pear_position_id")
+  entryPrice      Decimal?  @map("entry_price")
+  currentPnl      Decimal   @default(0) @map("current_pnl")
+  isClosed        Boolean   @default(false) @map("is_closed")
+  closedAt        DateTime? @map("closed_at")
+  closePrice      Decimal?  @map("close_price")
+  realizedPnl     Decimal?  @map("realized_pnl")
+  tpPercent       Decimal?  @map("tp_percent")
+  slPercent       Decimal?  @map("sl_percent")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  match Match @relation(fields: [matchId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("draft_picks")
+}
+
+model League {
+  id              String   @id @default(uuid()) @db.Uuid
+  name            String?
+  tradeMode       String   @map("trade_mode")
+  tier            String
+  status          String   @default("filling")
+  currentWeek     Int      @default(0) @map("current_week")
+  totalWeeks      Int      @default(12) @map("total_weeks")
+  maxPlayers      Int      @default(12) @map("max_players")
+  wagerAmountUsdc Decimal? @map("wager_amount_usdc")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  members  LeagueMember[]
+  matches  Match[]
+  schedule LeagueSchedule[]
+
+  @@map("leagues")
+}
+
+model LeagueMember {
+  leagueId    String  @map("league_id") @db.Uuid
+  userId      String  @map("user_id") @db.Uuid
+  coManagerId String? @map("co_manager_id") @db.Uuid
+  wins        Int     @default(0)
+  losses      Int     @default(0)
+  totalPnl    Decimal @default(0) @map("total_pnl")
+  rank        Int?
+  hasRageQuit Boolean @default(false) @map("has_rage_quit")
+
+  league League @relation(fields: [leagueId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@id([leagueId, userId])
+  @@map("league_members")
+}
+
+model LeagueSchedule {
+  id        String  @id @default(uuid()) @db.Uuid
+  leagueId  String  @map("league_id") @db.Uuid
+  week      Int
+  matchId   String? @map("match_id") @db.Uuid
+  player1Id String  @map("player1_id") @db.Uuid
+  player2Id String  @map("player2_id") @db.Uuid
+
+  league League @relation(fields: [leagueId], references: [id])
+  match  Match? @relation(fields: [matchId], references: [id])
+
+  @@map("league_schedule")
+}
+
+model UniteTransaction {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  type      String
+  amount    Decimal
+  txHash    String?  @map("tx_hash")
+  matchId   String?  @map("match_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user  User   @relation(fields: [userId], references: [id])
+  match Match? @relation(fields: [matchId], references: [id])
+
+  @@map("unite_transactions")
+}
+
+model PnlSnapshot {
+  time     DateTime @map("time")
+  matchId  String   @map("match_id") @db.Uuid
+  userId   String   @map("user_id") @db.Uuid
+  totalPnl Decimal  @map("total_pnl")
+
+  @@id([time, matchId, userId])
+  @@map("pnl_snapshots")
+}
+
+model Watchlist {
+  userId      String @map("user_id") @db.Uuid
+  tokenSymbol String @map("token_symbol")
+  priority    Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId, tokenSymbol])
+  @@map("watchlists")
+}
