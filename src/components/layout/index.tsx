@@ -102,7 +102,7 @@ export function Footer() {
           <FooterLink href="/risk">Risk Disclosure</FooterLink>
         </div>
         {/* Branding */}
-        <div className="flex items-center justify-between text-3xs text-fc-text-dim tracking-wider pt-2 border-t border-fc-border">
+        <div className="flex items-center justify-between text-3xs text-fc-text-muted tracking-wider pt-2 border-t border-fc-border">
           <span>DRAFTCRYPTO v0.3</span>
           <span>ARBITRUM · PEAR PROTOCOL</span>
         </div>
@@ -113,7 +113,7 @@ export function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link href={href} className="text-3xs text-fc-text-dim hover:text-fc-green font-mono tracking-wider transition-colors">
+    <Link href={href} className="text-3xs text-fc-text-muted hover:text-fc-green font-mono tracking-wider transition-colors">
       {children}
     </Link>
   );
