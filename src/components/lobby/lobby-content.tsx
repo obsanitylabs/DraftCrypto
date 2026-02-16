@@ -62,10 +62,10 @@ export function LobbyContent() {
         <div className="text-7xl font-bold text-fc-green fc-glow-green leading-none animate-count-down">
           {matchCountdown}
         </div>
-        <div className="text-2xs text-fc-text-muted mt-5">
+        <div className="text-sm text-fc-text-muted mt-5">
           vs <span className="text-fc-text font-semibold">0xbeef...cafe</span>
         </div>
-        <div className="flex gap-1.5 justify-center mt-4">
+        <div className="flex gap-2 justify-center mt-4">
           <Badge variant={matchType === 'fast' ? 'gold' : 'green'}>
             {matchType === 'fast' ? 'FAST' : 'FULL'} DRAFT
           </Badge>
@@ -77,13 +77,13 @@ export function LobbyContent() {
   }
 
   return (
-    <div className="px-4 pb-10">
+    <div className="px-4 pb-10 max-w-3xl mx-auto">
       {/* Tab Toggle */}
-      <div className="flex gap-1 my-4">
+      <div className="flex gap-2 my-4">
         {(['h2h', 'league'] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={cn(
-              'flex-1 py-2.5 text-2xs font-bold tracking-widest font-mono uppercase border transition-all',
+              'flex-1 py-3 text-xs font-bold tracking-widest font-mono uppercase border transition-all rounded-md',
               tab === t ? 'bg-fc-green-glow border-fc-border-green text-fc-green' : 'bg-transparent border-fc-border text-fc-text-muted',
             )}>{t === 'h2h' ? 'Head-to-Head' : 'League'}</button>
         ))}
@@ -92,71 +92,71 @@ export function LobbyContent() {
       {tab === 'h2h' ? (
         <>
           {/* Match Type */}
-          <div className="mb-3">
+          <div className="mb-4">
             <SectionTitle>Match Type</SectionTitle>
-            <div className="flex gap-1.5">
+            <div className="flex gap-2">
               <OptionCard selected={matchType === 'fast'} accent="gold" onClick={() => setMatchType('fast')}>
-                <div className="text-2xs font-bold mb-0.5">Fast Match</div>
-                <div className="text-3xs text-fc-text-muted leading-relaxed mb-1.5">Draft 1 token pair. Quick games.</div>
+                <div className="text-sm font-bold mb-1">Fast Match</div>
+                <div className="text-xs text-fc-text-muted leading-relaxed mb-2">Draft 1 token pair. Quick games.</div>
                 <Badge variant="gold">1 PICK EACH</Badge>
               </OptionCard>
               <OptionCard selected={matchType === 'full'} accent="green" onClick={() => setMatchType('full')}>
-                <div className="text-2xs font-bold mb-0.5">Full Draft</div>
-                <div className="text-3xs text-fc-text-muted leading-relaxed mb-1.5">Snake draft 8 tokens. Full portfolio.</div>
+                <div className="text-sm font-bold mb-1">Full Draft</div>
+                <div className="text-xs text-fc-text-muted leading-relaxed mb-2">Snake draft 8 tokens. Full portfolio.</div>
                 <Badge variant="green">8 PICKS EACH</Badge>
               </OptionCard>
             </div>
           </div>
 
           {/* Duration */}
-          <div className="mb-3">
+          <div className="mb-4">
             <SectionTitle>Match Duration</SectionTitle>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {(['1D', '3D', '1W'] as MatchDuration[]).map((d) => (
                 <button key={d} onClick={() => setDuration(d)}
                   className={cn(
-                    'flex-1 py-2.5 text-center font-mono border transition-all',
+                    'flex-1 py-3 text-center font-mono border transition-all rounded-md',
                     duration === d ? 'bg-fc-green-glow border-fc-border-green' : 'bg-transparent border-fc-border',
                   )}>
-                  <div className={cn('text-sm font-bold', duration === d ? 'text-fc-green' : 'text-fc-text')}>{d}</div>
-                  <div className="text-3xs text-fc-text-muted">{d === '1D' ? '24 hours' : d === '3D' ? '3 days' : '7 days'}</div>
+                  <div className={cn('text-base font-bold', duration === d ? 'text-fc-green' : 'text-fc-text')}>{d}</div>
+                  <div className="text-xs text-fc-text-muted">{d === '1D' ? '24 hours' : d === '3D' ? '3 days' : '7 days'}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Trade Mode */}
-          <div className="mb-3">
+          <div className="mb-4">
             <SectionTitle>Trade Mode</SectionTitle>
-            <div className="flex gap-1.5">
+            <div className="flex gap-2">
               <OptionCard selected={tradeMode === 'paper'} accent="gold" onClick={() => setTradeMode('paper')}>
-                <div className="text-base mb-0.5">📄</div>
-                <div className="text-2xs font-bold">Paper</div>
-                <div className="text-3xs text-fc-text-muted mt-0.5">Simulated. No Hyperliquid needed.</div>
+                <div className="text-lg mb-1">📄</div>
+                <div className="text-sm font-bold">Paper</div>
+                <div className="text-xs text-fc-text-muted mt-1">Simulated. No Hyperliquid needed.</div>
               </OptionCard>
               <OptionCard selected={tradeMode === 'live'} accent="green" onClick={() => setTradeMode('live')}>
-                <div className="text-base mb-0.5">⚡</div>
-                <div className="text-2xs font-bold">Live</div>
-                <div className="text-3xs text-fc-text-muted mt-0.5">Real trades via Pear Protocol.</div>
+                <div className="text-lg mb-1">⚡</div>
+                <div className="text-sm font-bold">Live</div>
+                <div className="text-xs text-fc-text-muted mt-1">Real trades via Pear Protocol.</div>
               </OptionCard>
             </div>
           </div>
 
           {/* Tier */}
-          <div className="mb-4">
+          <div className="mb-5">
             <SectionTitle>Wager Tier</SectionTitle>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {(['fun', 'serious', 'whale'] as StakingTier[]).map((t) => {
                 const cfg = STAKING_TIERS[t];
                 return (
                   <button key={t} onClick={() => setTier(t)}
                     className={cn(
-                      'flex-1 py-2.5 text-center font-mono border transition-all',
+                      'flex-1 py-3 text-center font-mono border transition-all rounded-md',
                       tier === t ? 'bg-fc-green-glow border-fc-border-green' : 'bg-transparent border-fc-border',
                     )}>
-                    <div className={cn('text-2xs font-bold', tier === t ? 'text-fc-green' : 'text-fc-text')}>{cfg.label}</div>
-                    <div className="text-2xs text-fc-green font-semibold">{cfg.wagerUsdc} USDC</div>
-                    <div className="text-3xs text-fc-text-dim mt-0.5">{(cfg.uniteRequired / 1000).toFixed(0)}k UNITE</div>
+                    <div className={cn('text-sm font-bold', tier === t ? 'text-fc-green' : 'text-fc-text')}>{cfg.label}</div>
+                    <div className="text-sm text-fc-green font-semibold">{cfg.wagerUsdc} USDC</div>
+                    <div className="text-xs text-fc-text-dim mt-1">{(cfg.uniteRequired / 1000).toFixed(0)}k UNITE</div>
                   </button>
                 );
               })}
@@ -165,9 +165,9 @@ export function LobbyContent() {
 
           {/* Capital Info */}
           {tradeMode === 'live' && (
-            <div className="mb-4 p-3 bg-fc-green-glow border border-fc-border-green">
-              <div className="text-3xs text-fc-green font-semibold mb-1">LIVE TRADING CAPITAL REQUIRED</div>
-              <div className="text-2xs text-fc-text-muted">
+            <div className="mb-5 p-4 bg-fc-green-glow border border-fc-border-green rounded-md">
+              <div className="text-xs text-fc-green font-semibold mb-1">LIVE TRADING CAPITAL REQUIRED</div>
+              <div className="text-sm text-fc-text-muted">
                 Min ${matchType === 'fast' ? GAME.MIN_CAPITAL_FAST : GAME.MIN_CAPITAL_FULL} USDC on Hyperliquid
                 ({matchType === 'fast' ? '1' : '8'} positions × ${GAME.MIN_POSITION_SIZE_USD})
               </div>
@@ -180,17 +180,17 @@ export function LobbyContent() {
           </Button>
 
           {/* Open Matches */}
-          <div className="mt-6">
+          <div className="mt-8">
             <SectionTitle right={`${MOCK_OPEN.length} waiting`}>Join Open Match</SectionTitle>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               {MOCK_OPEN.map((m) => (
-                <Card key={m.id} hover className="flex items-center justify-between p-3">
-                  <div className="flex items-center gap-2">
+                <Card key={m.id} hover className="flex items-center justify-between p-4">
+                  <div className="flex items-center gap-3">
                     <MatchTypeBadge type={m.matchType} duration={m.duration} />
                     <div>
-                      <div className="text-2xs text-fc-text">{m.creator}</div>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-3xs text-fc-text-muted">{m.wager} USDC</span>
+                      <div className="text-sm text-fc-text">{m.creator}</div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs text-fc-text-muted">{m.wager} USDC</span>
                         <TradeModeBadge mode={m.tradeMode} />
                         <TierBadge tier={m.tier} />
                       </div>
@@ -205,15 +205,15 @@ export function LobbyContent() {
       ) : (
         <div className="mt-4">
           <SectionTitle>Open Leagues</SectionTitle>
-          <Card className="p-3 mb-1.5">
-            <div className="text-xs font-bold">Degen League #42</div>
-            <div className="text-3xs text-fc-text-muted mt-1">8/12 players · serious · 12 weeks</div>
-            <Button variant="secondary" size="sm" className="mt-2">JOIN LEAGUE</Button>
+          <Card className="p-4 mb-2">
+            <div className="text-sm font-bold">Degen League #42</div>
+            <div className="text-xs text-fc-text-muted mt-1">8/12 players · serious · 12 weeks</div>
+            <Button variant="secondary" size="sm" className="mt-3">JOIN LEAGUE</Button>
           </Card>
-          <Card className="p-3">
-            <div className="text-xs font-bold">Fun League #107</div>
-            <div className="text-3xs text-fc-text-muted mt-1">3/12 players · fun · 12 weeks</div>
-            <Button variant="secondary" size="sm" className="mt-2">JOIN LEAGUE</Button>
+          <Card className="p-4">
+            <div className="text-sm font-bold">Fun League #107</div>
+            <div className="text-xs text-fc-text-muted mt-1">3/12 players · fun · 12 weeks</div>
+            <Button variant="secondary" size="sm" className="mt-3">JOIN LEAGUE</Button>
           </Card>
         </div>
       )}
@@ -226,7 +226,7 @@ function OptionCard({ selected, accent, onClick, children }: {
 }) {
   return (
     <button onClick={onClick} className={cn(
-      'flex-1 p-3 text-left font-mono border transition-all',
+      'flex-1 p-4 text-left font-mono border transition-all rounded-md',
       selected
         ? accent === 'gold' ? 'bg-fc-gold-glow border-fc-gold/25' : 'bg-fc-green-glow border-fc-border-green'
         : 'bg-transparent border-fc-border hover:border-fc-border-light',

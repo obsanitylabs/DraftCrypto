@@ -3,14 +3,14 @@ import { PageShell } from '@/components/layout';
 export default function TermsPage() {
   return (
     <PageShell>
-      <div className="p-4 pb-12 space-y-6">
-        <div className="border-b border-fc-border pb-4">
-          <h1 className="text-sm font-mono tracking-widest font-bold">TERMS OF SERVICE</h1>
-          <p className="text-3xs text-fc-text-dim tracking-wider mt-1">Last updated: February 2026</p>
+      <div className="px-4 py-8 pb-16 space-y-8 max-w-3xl mx-auto">
+        <div className="border-b border-fc-border pb-6">
+          <h1 className="text-xl font-mono tracking-widest font-bold">TERMS OF SERVICE</h1>
+          <p className="text-sm text-fc-text-dim tracking-wider mt-2">Last updated: February 2026</p>
         </div>
 
         <Section title="1. ACCEPTANCE OF TERMS">
-          <p>By accessing or using Fantasy Crypto (&quot;the Platform&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, do not use the Platform. These Terms constitute a legally binding agreement between you and Fantasy Crypto.</p>
+          <p>By accessing or using DraftCrypto (&quot;the Platform&quot;), you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, do not use the Platform. These Terms constitute a legally binding agreement between you and DraftCrypto.</p>
         </Section>
 
         <Section title="2. ELIGIBILITY">
@@ -22,11 +22,11 @@ export default function TermsPage() {
         </Section>
 
         <Section title="4. PLATFORM SERVICES">
-          <p>Fantasy Crypto provides: head-to-head and league-based crypto portfolio drafting competitions, live and paper (simulated) trade modes, USDC wager escrow via smart contracts, UNITE token rewards and staking, leaderboards and performance tracking, and referral programs. We reserve the right to modify, suspend, or discontinue any feature at any time.</p>
+          <p>DraftCrypto provides: head-to-head and league-based crypto portfolio drafting competitions, live and paper (simulated) trade modes, USDC wager escrow via smart contracts, UNITE token rewards and staking, leaderboards and performance tracking, and referral programs. We reserve the right to modify, suspend, or discontinue any feature at any time.</p>
         </Section>
 
         <Section title="5. MATCHES & WAGERS">
-          <p>In Live trade mode, USDC wagers are locked in the FantasyCryptoVault smart contract for the duration of the match. A 5% platform fee is deducted from the total pot upon settlement. Match results are determined by the cumulative weighted PnL of each player&apos;s drafted portfolio. Settlement is final once the smart contract executes. In Paper trade mode, no real wagers are placed and PnL is simulated based on live market prices.</p>
+          <p>In Live trade mode, USDC wagers are locked in the DraftCryptoVault smart contract for the duration of the match. A 5% platform fee is deducted from the total pot upon settlement. Match results are determined by the cumulative weighted PnL of each player&apos;s drafted portfolio. Settlement is final once the smart contract executes. In Paper trade mode, no real wagers are placed and PnL is simulated based on live market prices.</p>
         </Section>
 
         <Section title="6. DRAFTS & FAIR PLAY">
@@ -50,7 +50,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="11. INTELLECTUAL PROPERTY">
-          <p>All content, branding, design, code, and materials on the Platform are owned by Fantasy Crypto or its licensors. You may not reproduce, distribute, modify, or create derivative works without written permission. User-generated content (ENS names, handles) remains your property.</p>
+          <p>All content, branding, design, code, and materials on the Platform are owned by DraftCrypto or its licensors. You may not reproduce, distribute, modify, or create derivative works without written permission. User-generated content (ENS names, handles) remains your property.</p>
         </Section>
 
         <Section title="12. PROHIBITED CONDUCT">
@@ -62,7 +62,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="14. LIMITATION OF LIABILITY">
-          <p>To the maximum extent permitted by law, Fantasy Crypto shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of funds, data, or goodwill, arising from your use of the Platform.</p>
+          <p>To the maximum extent permitted by law, DraftCrypto shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of funds, data, or goodwill, arising from your use of the Platform.</p>
         </Section>
 
         <Section title="15. TERMINATION">
@@ -70,7 +70,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="16. DISPUTE RESOLUTION">
-          <p>Any disputes arising from these Terms shall be resolved through binding arbitration. You agree to waive your right to a jury trial and to participate in class action lawsuits against Fantasy Crypto.</p>
+          <p>Any disputes arising from these Terms shall be resolved through binding arbitration. You agree to waive your right to a jury trial and to participate in class action lawsuits against DraftCrypto.</p>
         </Section>
 
         <Section title="17. MODIFICATIONS">
@@ -78,7 +78,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="18. CONTACT">
-          <p>For questions about these Terms: legal@fantasycrypto.gg</p>
+          <p>For questions about these Terms: legal@draftcrypto.com</p>
         </Section>
       </div>
     </PageShell>
@@ -87,9 +87,9 @@ export default function TermsPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-2">
-      <h2 className="text-3xs font-mono tracking-widest text-fc-green font-semibold">{title}</h2>
-      <div className="text-3xs text-fc-text-muted tracking-wider leading-relaxed space-y-2">
+    <div className="space-y-3">
+      <h2 className="text-sm font-mono tracking-widest text-fc-green font-semibold">{title}</h2>
+      <div className="text-sm text-fc-text-muted tracking-wider leading-relaxed space-y-3">
         {children}
       </div>
     </div>

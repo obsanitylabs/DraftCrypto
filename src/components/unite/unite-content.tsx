@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — UNITE Token Page
+// DraftCrypto — UNITE Token Page
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -71,16 +71,16 @@ export function UniteContent() {
     : 0;
 
   return (
-    <div className="px-4 pb-10">
+    <div className="px-4 pb-10 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="py-4 border-b border-fc-border-green mb-4">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-8 h-8 rounded-full border-2 border-fc-green flex items-center justify-center font-display italic text-fc-green font-bold text-sm shadow-green-glow">
+      <div className="py-5 border-b border-fc-border-green mb-5">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-10 h-10 rounded-full border-2 border-fc-green flex items-center justify-center font-display italic text-fc-green font-bold text-base shadow-green-glow">
             U
           </div>
           <div>
-            <div className="text-sm font-bold">UNITE TOKEN</div>
-            <div className="text-3xs text-fc-text-dim tracking-wider">
+            <div className="text-base font-bold">UNITE TOKEN</div>
+            <div className="text-xs text-fc-text-dim tracking-wider">
               {shortenAddress(CONTRACTS.UNITE_TOKEN)} · Arbitrum
             </div>
           </div>
@@ -88,25 +88,25 @@ export function UniteContent() {
       </div>
 
       {/* Balance Card */}
-      <Card accent className="p-4 mb-3">
+      <Card accent className="p-5 mb-4">
         <div className="flex items-start justify-between">
           <div>
-            <div className="text-3xs text-fc-text-dim tracking-widest-2 mb-1">AVAILABLE BALANCE</div>
-            <div className="text-2xl font-bold text-fc-green fc-glow-green">
+            <div className="text-xs text-fc-text-dim tracking-widest mb-1">AVAILABLE BALANCE</div>
+            <div className="text-3xl font-bold text-fc-green fc-glow-green">
               {formatUnite(balance)}
             </div>
-            <div className="text-3xs text-fc-text-dim mt-0.5">UNITE</div>
+            <div className="text-xs text-fc-text-dim mt-1">UNITE</div>
           </div>
           <div className="text-right">
-            <div className="text-3xs text-fc-text-dim tracking-widest-2 mb-1">STAKED</div>
-            <div className="text-lg font-bold text-fc-text">
+            <div className="text-xs text-fc-text-dim tracking-widest mb-1">STAKED</div>
+            <div className="text-xl font-bold text-fc-text">
               {formatUnite(staked)}
             </div>
-            <div className="text-3xs text-fc-text-dim mt-0.5">UNITE</div>
+            <div className="text-xs text-fc-text-dim mt-1">UNITE</div>
           </div>
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-5">
           <Button variant="primary" size="sm" className="flex-1" onClick={() => setStakeModal(true)}>
             STAKE
           </Button>
@@ -117,32 +117,32 @@ export function UniteContent() {
       </Card>
 
       {/* Current Tier */}
-      <Card className="p-4 mb-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-3xs text-fc-text-dim tracking-widest-2">YOUR TIER</div>
+      <Card className="p-5 mb-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-xs text-fc-text-dim tracking-widest">YOUR TIER</div>
           <TierBadge tier={currentTier} />
         </div>
 
         {/* Tier Benefits */}
-        <div className="grid grid-cols-3 gap-2 mb-3">
+        <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="text-center">
-            <div className="text-lg font-bold text-fc-green">{tierConfig.wagerUsdc}</div>
-            <div className="text-3xs text-fc-text-dim">USDC Wager</div>
+            <div className="text-xl font-bold text-fc-green">{tierConfig.wagerUsdc}</div>
+            <div className="text-xs text-fc-text-dim">USDC Wager</div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-bold text-fc-gold">{tierConfig.boostCount}</div>
-            <div className="text-3xs text-fc-text-dim">Boosts/Match</div>
+            <div className="text-xl font-bold text-fc-gold">{tierConfig.boostCount}</div>
+            <div className="text-xs text-fc-text-dim">Boosts/Match</div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-bold text-fc-text">{tierConfig.boostMax}x</div>
-            <div className="text-3xs text-fc-text-dim">Max Boost</div>
+            <div className="text-xl font-bold text-fc-text">{tierConfig.boostMax}x</div>
+            <div className="text-xs text-fc-text-dim">Max Boost</div>
           </div>
         </div>
 
         {/* Progress to next tier */}
         {nextTier && nextTierConfig && (
           <div>
-            <div className="flex justify-between text-3xs mb-1">
+            <div className="flex justify-between text-xs mb-1.5">
               <span className="text-fc-text-muted">
                 Progress to <span className="font-bold" style={{ color: STAKING_TIERS[nextTier].color }}>
                   {nextTierConfig.label}
@@ -161,7 +161,7 @@ export function UniteContent() {
         )}
 
         {!nextTier && (
-          <div className="text-center text-3xs text-fc-gold fc-glow-gold font-bold">
+          <div className="text-center text-sm text-fc-gold fc-glow-gold font-bold">
             🐋 MAX TIER ACHIEVED
           </div>
         )}
@@ -169,7 +169,7 @@ export function UniteContent() {
 
       {/* Tier Comparison */}
       <SectionTitle>All Tiers</SectionTitle>
-      <div className="flex gap-1 mb-4">
+      <div className="flex gap-2 mb-5">
         {(['fun', 'serious', 'whale'] as StakingTier[]).map((t) => {
           const cfg = STAKING_TIERS[t];
           const isActive = t === currentTier;
@@ -179,27 +179,27 @@ export function UniteContent() {
             <div
               key={t}
               className={cn(
-                'flex-1 p-3 border text-center transition-all',
+                'flex-1 p-4 border text-center transition-all rounded-lg',
                 isActive
                   ? 'border-fc-border-green bg-fc-green-glow'
                   : 'border-fc-border bg-fc-card',
               )}
             >
               <div className={cn(
-                'text-2xs font-bold mb-1',
+                'text-sm font-bold mb-1',
                 isActive ? 'text-fc-green' : 'text-fc-text-muted',
               )} style={!isActive && t === 'whale' ? { color: cfg.color } : undefined}>
                 {cfg.label}
               </div>
-              <div className="text-3xs text-fc-text-dim mb-1.5">
+              <div className="text-xs text-fc-text-dim mb-2">
                 {formatUnite(cfg.uniteRequired)}
               </div>
-              <div className="space-y-1">
-                <div className="text-3xs">
+              <div className="space-y-1.5">
+                <div className="text-xs">
                   <span className="text-fc-text-dim">Wager: </span>
                   <span className="text-fc-text">{cfg.wagerUsdc} USDC</span>
                 </div>
-                <div className="text-3xs">
+                <div className="text-xs">
                   <span className="text-fc-text-dim">Boosts: </span>
                   <span className="text-fc-text">{cfg.boostCount}×{cfg.boostMax}x</span>
                 </div>
@@ -208,7 +208,7 @@ export function UniteContent() {
                 <Badge variant="green" className="mt-2">CURRENT</Badge>
               )}
               {isBelow && !isActive && (
-                <div className="text-3xs text-fc-green mt-2">✓</div>
+                <div className="text-xs text-fc-green mt-2">✓</div>
               )}
             </div>
           );
@@ -217,8 +217,8 @@ export function UniteContent() {
 
       {/* How to Earn */}
       <SectionTitle>How to Earn UNITE</SectionTitle>
-      <Card className="p-3 mb-4">
-        <div className="space-y-2">
+      <Card className="p-4 mb-5">
+        <div className="space-y-3">
           {[
             { action: 'Win H2H Match', amount: '100 UNITE', icon: '🏆' },
             { action: 'Win League Week', amount: '150 UNITE', icon: '🏅' },
@@ -226,16 +226,16 @@ export function UniteContent() {
             { action: 'Top 10 Leaderboard', amount: '500 UNITE/week', icon: '📊' },
           ].map((r) => (
             <div key={r.action} className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm">{r.icon}</span>
-                <span className="text-2xs text-fc-text">{r.action}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-lg">{r.icon}</span>
+                <span className="text-sm text-fc-text">{r.action}</span>
               </div>
-              <span className="text-2xs text-fc-green font-bold">{r.amount}</span>
+              <span className="text-sm text-fc-green font-bold">{r.amount}</span>
             </div>
           ))}
         </div>
-        <div className="mt-3 pt-2 border-t border-fc-border">
-          <div className="text-3xs text-fc-text-dim">
+        <div className="mt-4 pt-3 border-t border-fc-border">
+          <div className="text-xs text-fc-text-dim">
             Paper mode matches earn 10% of live rewards. Swap ETH/USDC → UNITE on Uniswap (Arbitrum).
           </div>
         </div>
@@ -251,18 +251,18 @@ export function UniteContent() {
             <div
               key={tx.id}
               className={cn(
-                'flex items-center justify-between px-3 py-2.5',
+                'flex items-center justify-between px-4 py-3',
                 i < DEMO_TX.length - 1 && 'border-b border-fc-border',
               )}
             >
               <div>
-                <div className={cn('text-2xs font-semibold', meta.color)}>{meta.label}</div>
-                <div className="text-3xs text-fc-text-dim">
+                <div className={cn('text-sm font-semibold', meta.color)}>{meta.label}</div>
+                <div className="text-xs text-fc-text-dim">
                   {tx.matchId ? tx.matchId : ''} · {tx.date}
                 </div>
               </div>
               <div className={cn(
-                'text-2xs font-bold',
+                'text-sm font-bold',
                 isPositive ? 'text-fc-green' : 'text-fc-text-muted',
               )}>
                 {isPositive ? '+' : ''}{formatUnite(tx.amount)}
@@ -274,12 +274,12 @@ export function UniteContent() {
 
       {/* Stake Modal */}
       <Modal open={stakeModal} onClose={() => setStakeModal(false)} title="Stake UNITE">
-        <div className="text-3xs text-fc-text-muted mb-4">
+        <div className="text-sm text-fc-text-muted mb-5">
           Lock UNITE tokens to access wager tiers and earn boosts.
           7-day cooldown to unstake.
         </div>
-        <div className="mb-3">
-          <label className="text-3xs text-fc-text-dim tracking-wider block mb-1">AMOUNT</label>
+        <div className="mb-4">
+          <label className="text-xs text-fc-text-dim tracking-wider block mb-1.5">AMOUNT</label>
           <div className="flex gap-2">
             <Input
               type="number"
@@ -290,24 +290,24 @@ export function UniteContent() {
             />
             <button
               onClick={() => setStakeAmount(balance.toString())}
-              className="text-3xs text-fc-green border border-fc-border-green px-2 hover:bg-fc-green-glow"
+              className="text-xs text-fc-green border border-fc-border-green px-3 hover:bg-fc-green-glow rounded-md"
             >
               MAX
             </button>
           </div>
-          <div className="text-3xs text-fc-text-dim mt-1">
+          <div className="text-xs text-fc-text-dim mt-1.5">
             Available: {formatUnite(balance)} UNITE
           </div>
         </div>
 
         {/* Quick amounts */}
-        <div className="flex gap-1 mb-4">
+        <div className="flex gap-2 mb-5">
           {[1000, 10000, 50000].map(amt => (
             <button
               key={amt}
               onClick={() => setStakeAmount(amt.toString())}
               className={cn(
-                'flex-1 py-1.5 text-3xs font-mono border transition-all',
+                'flex-1 py-2 text-xs font-mono border transition-all rounded-md',
                 stakeAmount === amt.toString()
                   ? 'border-fc-border-green bg-fc-green-glow text-fc-green'
                   : 'border-fc-border text-fc-text-muted hover:border-fc-border-light',
@@ -320,9 +320,9 @@ export function UniteContent() {
 
         {/* Result preview */}
         {stakeAmount && parseInt(stakeAmount) > 0 && (
-          <div className="p-2 bg-fc-green-glow border border-fc-border-green mb-4">
-            <div className="text-3xs text-fc-text-dim">After staking:</div>
-            <div className="text-2xs font-bold text-fc-green mt-0.5">
+          <div className="p-3 bg-fc-green-glow border border-fc-border-green mb-5 rounded-md">
+            <div className="text-xs text-fc-text-dim">After staking:</div>
+            <div className="text-sm font-bold text-fc-green mt-1">
               {formatUnite(staked + parseInt(stakeAmount))} UNITE staked
               {(() => {
                 const total = staked + parseInt(stakeAmount);
@@ -352,16 +352,16 @@ export function UniteContent() {
 
       {/* Unstake Modal */}
       <Modal open={unstakeModal} onClose={() => setUnstakeModal(false)} title="Unstake UNITE">
-        <div className="p-2 border border-fc-gold/20 bg-fc-gold-glow mb-4">
-          <div className="text-3xs text-fc-gold font-semibold">⚠ 7-DAY COOLDOWN</div>
-          <div className="text-3xs text-fc-text-muted mt-1">
+        <div className="p-3 border border-fc-gold/20 bg-fc-gold-glow mb-5 rounded-md">
+          <div className="text-xs text-fc-gold font-semibold">⚠ 7-DAY COOLDOWN</div>
+          <div className="text-sm text-fc-text-muted mt-1">
             After requesting unstake, tokens are locked for 7 days before withdrawal.
             Your tier may drop if staked amount falls below threshold.
           </div>
         </div>
 
-        <div className="mb-3">
-          <label className="text-3xs text-fc-text-dim tracking-wider block mb-1">AMOUNT</label>
+        <div className="mb-4">
+          <label className="text-xs text-fc-text-dim tracking-wider block mb-1.5">AMOUNT</label>
           <div className="flex gap-2">
             <Input
               type="number"
@@ -372,20 +372,20 @@ export function UniteContent() {
             />
             <button
               onClick={() => setUnstakeAmount(staked.toString())}
-              className="text-3xs text-fc-red border border-fc-red/20 px-2 hover:bg-fc-red-glow"
+              className="text-xs text-fc-red border border-fc-red/20 px-3 hover:bg-fc-red-glow rounded-md"
             >
               MAX
             </button>
           </div>
-          <div className="text-3xs text-fc-text-dim mt-1">
+          <div className="text-xs text-fc-text-dim mt-1.5">
             Staked: {formatUnite(staked)} UNITE
           </div>
         </div>
 
         {unstakeAmount && parseInt(unstakeAmount) > 0 && (
-          <div className="p-2 bg-fc-red-glow border border-fc-red/20 mb-4">
-            <div className="text-3xs text-fc-text-dim">After unstaking:</div>
-            <div className="text-2xs font-bold text-fc-red mt-0.5">
+          <div className="p-3 bg-fc-red-glow border border-fc-red/20 mb-5 rounded-md">
+            <div className="text-xs text-fc-text-dim">After unstaking:</div>
+            <div className="text-sm font-bold text-fc-red mt-1">
               {formatUnite(Math.max(0, staked - parseInt(unstakeAmount)))} UNITE staked
               {(() => {
                 const remaining = staked - parseInt(unstakeAmount);

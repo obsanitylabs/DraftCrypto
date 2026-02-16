@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Leaderboard
+// DraftCrypto — Leaderboard
 // ═══════════════════════════════════════════════════════
 
 'use client';
@@ -58,24 +58,24 @@ export function LeaderboardContent() {
   const you = DEMO_LEADERBOARD.find(e => e.isYou);
 
   return (
-    <div className="px-4 pb-10">
+    <div className="px-4 pb-10 max-w-3xl mx-auto">
       {/* Header */}
-      <div className="py-4 border-b border-fc-border-green mb-4">
-        <div className="text-sm font-bold">Leaderboard</div>
-        <div className="text-3xs text-fc-text-dim mt-0.5">
+      <div className="py-5 border-b border-fc-border-green mb-5">
+        <div className="text-base font-bold">Leaderboard</div>
+        <div className="text-sm text-fc-text-dim mt-1">
           Top traders ranked by total PnL %
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2 mb-4">
-        <div className="flex gap-0.5 flex-1">
+      <div className="flex gap-2 mb-5">
+        <div className="flex gap-1 flex-1">
           {(['weekly', 'monthly', 'alltime'] as TimeFilter[]).map(f => (
             <button
               key={f}
               onClick={() => setTimeFilter(f)}
               className={cn(
-                'flex-1 py-1.5 text-3xs font-mono border transition-all text-center',
+                'flex-1 py-2 text-xs font-mono border transition-all text-center rounded-md',
                 timeFilter === f
                   ? 'border-fc-border-green bg-fc-green-glow text-fc-green'
                   : 'border-fc-border text-fc-text-dim hover:text-fc-text-muted',
@@ -85,13 +85,13 @@ export function LeaderboardContent() {
             </button>
           ))}
         </div>
-        <div className="flex gap-0.5">
+        <div className="flex gap-1">
           {(['all', 'live', 'paper'] as ModeFilter[]).map(f => (
             <button
               key={f}
               onClick={() => setModeFilter(f)}
               className={cn(
-                'px-2 py-1.5 text-3xs font-mono border transition-all',
+                'px-3 py-2 text-xs font-mono border transition-all rounded-md',
                 modeFilter === f
                   ? f === 'live'
                     ? 'border-fc-border-green bg-fc-green-glow text-fc-green'
@@ -108,7 +108,7 @@ export function LeaderboardContent() {
       </div>
 
       {/* Top 3 Podium */}
-      <div className="flex gap-1.5 mb-4">
+      <div className="flex gap-2 mb-5">
         {[top3[1], top3[0], top3[2]].filter(Boolean).map((entry) => {
           const isFirst = entry.rank === 1;
           const medal = entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : '🥉';
@@ -117,21 +117,21 @@ export function LeaderboardContent() {
             <div
               key={entry.rank}
               className={cn(
-                'flex-1 border p-3 text-center transition-all',
+                'flex-1 border p-4 text-center transition-all rounded-lg',
                 isFirst
                   ? 'border-fc-gold/30 bg-fc-gold-glow -mt-2'
                   : 'border-fc-border bg-fc-card mt-1',
               )}
             >
-              <div className="text-lg mb-1">{medal}</div>
+              <div className="text-xl mb-1">{medal}</div>
               <div className={cn(
-                'text-2xs font-bold truncate',
+                'text-sm font-bold truncate',
                 isFirst && 'text-fc-gold',
               )}>
                 {entry.ensName || entry.wallet}
               </div>
               <PnlDisplay value={entry.totalPnl} size="sm" />
-              <div className="text-3xs text-fc-text-dim mt-1">
+              <div className="text-xs text-fc-text-dim mt-1">
                 {entry.won}W-{entry.played - entry.won}L
               </div>
               <TierBadge tier={entry.tier} />
@@ -141,13 +141,13 @@ export function LeaderboardContent() {
       </div>
 
       {/* Rewards Info */}
-      <Card className="p-3 mb-4">
-        <div className="text-3xs text-fc-text-dim tracking-widest-2 mb-2">WEEKLY UNITE REWARDS</div>
-        <div className="grid grid-cols-4 gap-1">
+      <Card className="p-4 mb-5">
+        <div className="text-xs text-fc-text-dim tracking-widest mb-3">WEEKLY UNITE REWARDS</div>
+        <div className="grid grid-cols-4 gap-2">
           {REWARD_TIERS.map((r) => (
             <div key={r.range} className="text-center">
-              <div className={cn('text-2xs font-bold', r.color)}>{r.unite}</div>
-              <div className="text-3xs text-fc-text-dim">{r.range}</div>
+              <div className={cn('text-sm font-bold', r.color)}>{r.unite}</div>
+              <div className="text-xs text-fc-text-dim">{r.range}</div>
             </div>
           ))}
         </div>
@@ -155,14 +155,14 @@ export function LeaderboardContent() {
 
       {/* Full Rankings */}
       <SectionTitle right={`${DEMO_LEADERBOARD.length} players`}>Rankings</SectionTitle>
-      <Card className="overflow-hidden mb-3">
+      <Card className="overflow-hidden mb-4">
         {/* Header row */}
-        <div className="grid grid-cols-[32px_1fr_64px_48px_52px] px-3 py-1.5 border-b border-fc-border">
-          <span className="text-3xs text-fc-text-dim">#</span>
-          <span className="text-3xs text-fc-text-dim">PLAYER</span>
-          <span className="text-3xs text-fc-text-dim text-right">PNL %</span>
-          <span className="text-3xs text-fc-text-dim text-right">W/L</span>
-          <span className="text-3xs text-fc-text-dim text-right">WIN%</span>
+        <div className="grid grid-cols-[36px_1fr_72px_52px_56px] px-4 py-2 border-b border-fc-border">
+          <span className="text-xs text-fc-text-dim">#</span>
+          <span className="text-xs text-fc-text-dim">PLAYER</span>
+          <span className="text-xs text-fc-text-dim text-right">PNL %</span>
+          <span className="text-xs text-fc-text-dim text-right">W/L</span>
+          <span className="text-xs text-fc-text-dim text-right">WIN%</span>
         </div>
 
         {rest.map((entry, i) => (
@@ -175,24 +175,24 @@ export function LeaderboardContent() {
         <div>
           <SectionTitle>Your Position</SectionTitle>
           <Card className="overflow-hidden border-fc-border-green bg-fc-green-glow">
-            <div className="grid grid-cols-[32px_1fr_64px_48px_52px] px-3 py-2.5 items-center">
-              <span className="text-2xs font-bold text-fc-green">#{you.rank}</span>
+            <div className="grid grid-cols-[36px_1fr_72px_52px_56px] px-4 py-3 items-center">
+              <span className="text-sm font-bold text-fc-green">#{you.rank}</span>
               <div>
-                <div className="text-2xs font-bold text-fc-green">You</div>
-                <div className="text-3xs text-fc-text-dim">{you.wallet}</div>
+                <div className="text-sm font-bold text-fc-green">You</div>
+                <div className="text-xs text-fc-text-dim">{you.wallet}</div>
               </div>
               <div className="text-right">
                 <PnlDisplay value={you.totalPnl} size="sm" />
               </div>
-              <span className="text-3xs text-right text-fc-text">
+              <span className="text-xs text-right text-fc-text">
                 {you.won}-{you.played - you.won}
               </span>
-              <span className="text-3xs text-right text-fc-text">
+              <span className="text-xs text-right text-fc-text">
                 {you.winRate.toFixed(0)}%
               </span>
             </div>
-            <div className="px-3 pb-2 flex items-center justify-between">
-              <span className="text-3xs text-fc-text-dim">
+            <div className="px-4 pb-3 flex items-center justify-between">
+              <span className="text-xs text-fc-text-dim">
                 {formatUnite(you.uniteEarned)} UNITE earned this period
               </span>
               <TierBadge tier={you.tier} />
@@ -209,17 +209,17 @@ export function LeaderboardContent() {
 function LeaderboardRow({ entry, isLast }: { entry: LeaderboardEntry; isLast: boolean }) {
   return (
     <div className={cn(
-      'grid grid-cols-[32px_1fr_64px_48px_52px] px-3 py-2 items-center',
+      'grid grid-cols-[36px_1fr_72px_52px_56px] px-4 py-2.5 items-center',
       !isLast && 'border-b border-fc-border',
     )}>
       <span className={cn(
-        'text-2xs font-bold',
+        'text-sm font-bold',
         entry.rank <= 3 ? 'text-fc-gold' : entry.rank <= 10 ? 'text-fc-green' : 'text-fc-text-muted',
       )}>
         {entry.rank}
       </span>
       <div className="min-w-0">
-        <div className="text-2xs font-semibold truncate">
+        <div className="text-sm font-semibold truncate">
           {entry.ensName || entry.wallet}
         </div>
         <div className="flex items-center gap-1 mt-0.5">
@@ -229,10 +229,10 @@ function LeaderboardRow({ entry, isLast }: { entry: LeaderboardEntry; isLast: bo
       <div className="text-right">
         <PnlDisplay value={entry.totalPnl} size="sm" />
       </div>
-      <span className="text-3xs text-right text-fc-text-muted">
+      <span className="text-xs text-right text-fc-text-muted">
         {entry.won}-{entry.played - entry.won}
       </span>
-      <span className="text-3xs text-right text-fc-text-muted">
+      <span className="text-xs text-right text-fc-text-muted">
         {entry.winRate.toFixed(0)}%
       </span>
     </div>

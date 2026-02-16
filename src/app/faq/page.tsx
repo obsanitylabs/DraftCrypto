@@ -14,7 +14,7 @@ const FAQS: FAQItem[] = [
   // Getting Started
   { category: 'Getting Started', q: 'What do I need to get started?', a: 'A web3 wallet (MetaMask, Phantom, or WalletConnect-compatible) on Arbitrum One. You\'ll need a small amount of ETH on Arbitrum for gas fees. For Live mode, you\'ll also need USDC for wagers. Paper mode is completely free.' },
   { category: 'Getting Started', q: 'Is there a cost to play?', a: 'Paper mode is 100% free — you play with simulated positions and earn 10% of normal UNITE rewards. Live mode requires a USDC wager ($0.50 for Fun tier, $2 for Serious, $10 for Whale). A 5% platform fee is taken from the match pot upon settlement.' },
-  { category: 'Getting Started', q: 'What is the UNITE token?', a: 'UNITE is the Fantasy Crypto utility token on Arbitrum. You earn it by winning matches, placing on leaderboards, and referring friends. Stake UNITE to unlock tiers (Fun 1K, Serious 10K, Whale 100K) which determine your wager limits and boost allowances.' },
+  { category: 'Getting Started', q: 'What is the UNITE token?', a: 'UNITE is the DraftCrypto utility token on Arbitrum. You earn it by winning matches, placing on leaderboards, and referring friends. Stake UNITE to unlock tiers (Fun 1K, Serious 10K, Whale 100K) which determine your wager limits and boost allowances.' },
 
   // Drafting
   { category: 'Drafting', q: 'How does the draft work?', a: 'In a Full Draft (8 picks per player), you take turns picking crypto tokens in a snake draft order. Each pick has a 30-second timer. If time expires, the system auto-picks for you. Fast Match is a single-pick format. After the draft, you assign each pick as Long, Short, or Bench and set mandatory TP/SL levels.' },
@@ -38,13 +38,13 @@ const FAQS: FAQItem[] = [
   { category: 'Leagues', q: 'What happens if I rage quit?', a: 'Rage quitting forfeits all remaining matches for the season. Your opponents for those weeks receive automatic wins, and your wagers are distributed to them. Your record shows as losses. This is irreversible.' },
 
   // Technical
-  { category: 'Technical', q: 'What blockchain does Fantasy Crypto run on?', a: 'Arbitrum One — an Ethereum Layer 2 with fast transactions and low gas fees. The UNITE token, wager vault, and staking contracts are all on Arbitrum.' },
+  { category: 'Technical', q: 'What blockchain does DraftCrypto run on?', a: 'Arbitrum One — an Ethereum Layer 2 with fast transactions and low gas fees. The UNITE token, wager vault, and staking contracts are all on Arbitrum.' },
   { category: 'Technical', q: 'What are the gas costs?', a: 'Arbitrum gas fees are typically a few cents per transaction. You\'ll pay gas for: connecting your wallet (free, just a signature), approving USDC (one-time), creating/joining matches (vault interaction), and staking/unstaking UNITE.' },
-  { category: 'Technical', q: 'Is Fantasy Crypto open source?', a: 'Our smart contracts will be verified and published on Arbiscan. The frontend is currently closed source. Smart contract audits will be published before mainnet launch.' },
+  { category: 'Technical', q: 'Is DraftCrypto open source?', a: 'Our smart contracts will be verified and published on Arbiscan. The frontend is currently closed source. Smart contract audits will be published before mainnet launch.' },
 
   // Support
-  { category: 'Support', q: 'I found a bug. What should I do?', a: 'Please report bugs to bugs@fantasycrypto.gg or reach out on our Discord. If you discover a security vulnerability, please disclose it responsibly — do not exploit it. We may offer bounties for critical findings.' },
-  { category: 'Support', q: 'How do I contact support?', a: 'Email support@fantasycrypto.gg or join our Discord community. For urgent issues related to stuck funds, use the emergency channel on Discord.' },
+  { category: 'Support', q: 'I found a bug. What should I do?', a: 'Please report bugs to bugs@draftcrypto.com or reach out on our Discord. If you discover a security vulnerability, please disclose it responsibly — do not exploit it. We may offer bounties for critical findings.' },
+  { category: 'Support', q: 'How do I contact support?', a: 'Email hello@draftcrypto.com or join our Discord community. For urgent issues related to stuck funds, use the emergency channel on Discord.' },
 ];
 
 export default function FAQPage() {
@@ -53,16 +53,16 @@ export default function FAQPage() {
 
   return (
     <PageShell>
-      <div className="p-4 pb-12">
-        <div className="border-b border-fc-border pb-4 mb-6">
-          <h1 className="text-sm font-mono tracking-widest font-bold">FAQ</h1>
-          <p className="text-3xs text-fc-text-dim tracking-wider mt-1">Frequently asked questions</p>
+      <div className="px-4 py-8 pb-16 max-w-3xl mx-auto">
+        <div className="border-b border-fc-border pb-6 mb-8">
+          <h1 className="text-xl font-mono tracking-widest font-bold">FAQ</h1>
+          <p className="text-sm text-fc-text-dim tracking-wider mt-2">Frequently asked questions</p>
         </div>
 
         {categories.map(cat => (
-          <div key={cat} className="mb-6">
-            <h2 className="text-3xs font-mono tracking-widest text-fc-green font-semibold mb-2">{cat.toUpperCase()}</h2>
-            <div className="space-y-1">
+          <div key={cat} className="mb-8">
+            <h2 className="text-sm font-mono tracking-widest text-fc-green font-semibold mb-3">{cat.toUpperCase()}</h2>
+            <div className="space-y-2">
               {FAQS.filter(f => f.category === cat).map((faq, i) => {
                 const globalIdx = FAQS.indexOf(faq);
                 const isOpen = openId === globalIdx;
@@ -71,19 +71,19 @@ export default function FAQPage() {
                     key={i}
                     onClick={() => setOpenId(isOpen ? null : globalIdx)}
                     className={cn(
-                      'w-full text-left fc-card p-3 transition-colors',
+                      'w-full text-left fc-card p-4 transition-colors',
                       isOpen && 'border-fc-border-green',
                     )}
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-3xs font-mono tracking-wider text-fc-text">{faq.q}</span>
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="text-sm font-mono tracking-wider text-fc-text">{faq.q}</span>
                       <span className={cn(
-                        'text-fc-text-dim text-xs transition-transform shrink-0',
+                        'text-fc-text-dim text-base transition-transform shrink-0',
                         isOpen && 'rotate-45',
                       )}>+</span>
                     </div>
                     {isOpen && (
-                      <p className="text-3xs text-fc-text-muted tracking-wider leading-relaxed mt-2 border-t border-fc-border pt-2">
+                      <p className="text-sm text-fc-text-muted tracking-wider leading-relaxed mt-3 border-t border-fc-border pt-3">
                         {faq.a}
                       </p>
                     )}

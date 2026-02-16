@@ -117,8 +117,8 @@ export default function HistoryPage() {
 
   return (
     <PageShell>
-      <div className="p-4 pb-12 space-y-4">
-        <h1 className="text-sm font-mono tracking-widest font-bold">MATCH HISTORY</h1>
+      <div className="px-4 py-8 pb-16 space-y-5 max-w-3xl mx-auto">
+        <h1 className="text-xl font-mono tracking-widest font-bold">MATCH HISTORY</h1>
 
         {/* Summary Stats */}
         <div className="grid grid-cols-4 gap-2">
@@ -132,7 +132,7 @@ export default function HistoryPage() {
         <div className="flex gap-1">
           {(['all', 'win', 'loss'] as const).map(f => (
             <button key={f} onClick={() => setFilter(f)} className={cn(
-              'px-3 py-1.5 text-3xs font-mono tracking-widest',
+              'px-4 py-2 text-xs font-mono tracking-widest',
               filter === f ? 'bg-fc-green text-fc-bg' : 'bg-fc-card-alt text-fc-text-muted hover:text-fc-text',
             )}>{f.toUpperCase()}</button>
           ))}
@@ -151,7 +151,7 @@ export default function HistoryPage() {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-12 text-3xs text-fc-text-dim tracking-wider">NO MATCHES FOUND</div>
+            <div className="text-center py-12 text-sm text-fc-text-dim tracking-wider">NO MATCHES FOUND</div>
           )}
         </div>
       </div>
@@ -198,43 +198,43 @@ function MatchCard({ match, isExpanded, onToggle, onShare }: { match: HistoryMat
   const date = new Date(match.settledAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
   return (
-    <div className={cn('border transition-colors', match.result ? resultBg[match.result] : 'fc-card')}>
+    <div className={cn('border transition-colors rounded-lg', match.result ? resultBg[match.result] : 'fc-card')}>
       {/* Header */}
-      <button onClick={onToggle} className="w-full p-3 text-left">
+      <button onClick={onToggle} className="w-full p-4 text-left">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <span className={cn('text-xs font-mono font-bold tracking-widest', match.result ? resultColors[match.result] : '')}>
+          <div className="flex items-center gap-3">
+            <span className={cn('text-sm font-mono font-bold tracking-widest', match.result ? resultColors[match.result] : '')}>
               {match.result?.toUpperCase() || 'CANCELLED'}
             </span>
-            <span className="text-[9px] text-fc-text-dim tracking-widest">
+            <span className="text-xs text-fc-text-dim tracking-widest">
               {match.matchType === 'fast' ? 'FAST' : 'FULL'} · {match.tradeMode.toUpperCase()} · {match.duration}
             </span>
           </div>
-          <span className="text-[9px] text-fc-text-dim tracking-wider">{date}</span>
+          <span className="text-xs text-fc-text-dim tracking-wider">{date}</span>
         </div>
 
         <div className="flex items-center gap-4">
           {/* My PnL */}
           <div className="flex-1 text-right">
-            <div className="text-[9px] text-fc-text-dim tracking-widest">YOU</div>
-            <div className={cn('text-sm font-mono font-bold', match.myPnl >= 0 ? 'text-fc-green' : 'text-red-400')}>
+            <div className="text-xs text-fc-text-dim tracking-widest">YOU</div>
+            <div className={cn('text-lg font-mono font-bold', match.myPnl >= 0 ? 'text-fc-green' : 'text-red-400')}>
               {match.myPnl >= 0 ? '+' : ''}{match.myPnl.toFixed(2)}%
             </div>
           </div>
-          <span className="text-[9px] text-fc-text-dim font-mono">VS</span>
+          <span className="text-xs text-fc-text-dim font-mono">VS</span>
           {/* Opponent PnL */}
           <div className="flex-1 text-left">
-            <div className="text-[9px] text-fc-text-dim tracking-widest truncate">
+            <div className="text-xs text-fc-text-dim tracking-widest truncate">
               {match.opponent.ensName || shortenAddress(match.opponent.address)}
             </div>
-            <div className={cn('text-sm font-mono font-bold', match.oppPnl >= 0 ? 'text-fc-green' : 'text-red-400')}>
+            <div className={cn('text-lg font-mono font-bold', match.oppPnl >= 0 ? 'text-fc-green' : 'text-red-400')}>
               {match.oppPnl >= 0 ? '+' : ''}{match.oppPnl.toFixed(2)}%
             </div>
           </div>
         </div>
 
         {/* Rewards row */}
-        <div className="flex items-center gap-3 mt-2 text-[9px] text-fc-text-dim tracking-wider">
+        <div className="flex items-center gap-3 mt-3 text-xs text-fc-text-dim tracking-wider">
           {match.payout && <span className="text-fc-green">+${match.payout.toFixed(2)} USDC</span>}
           <span>+{match.uniteEarned} UNITE</span>
           <span className="ml-auto">{isExpanded ? '▲' : '▼'} Details</span>
@@ -243,7 +243,7 @@ function MatchCard({ match, isExpanded, onToggle, onShare }: { match: HistoryMat
 
       {/* Expanded Box Score */}
       {isExpanded && (
-        <div className="border-t border-inherit p-3 space-y-4">
+        <div className="border-t border-inherit p-4 space-y-4">
           <BoxScore title="YOUR PICKS" picks={match.myPicks} />
           <BoxScore title="OPPONENT PICKS" picks={match.oppPicks} />
 
@@ -264,26 +264,26 @@ function MatchCard({ match, isExpanded, onToggle, onShare }: { match: HistoryMat
 function BoxScore({ title, picks }: { title: string; picks: PickResult[] }) {
   return (
     <div>
-      <div className="text-[9px] text-fc-text-dim tracking-widest mb-1">{title}</div>
-      <div className="space-y-0.5">
+      <div className="text-xs text-fc-text-dim tracking-widest mb-2">{title}</div>
+      <div className="space-y-1">
         {picks.map((p, i) => (
-          <div key={i} className="grid grid-cols-[3rem_2rem_3rem_1fr_3.5rem] gap-2 items-center py-1">
-            <span className="text-3xs font-mono tracking-wider text-fc-text">{p.symbol}</span>
-            <span className={cn('text-[9px] font-mono tracking-widest',
+          <div key={i} className="grid grid-cols-[3.5rem_2.5rem_3rem_1fr_4rem] gap-2 items-center py-1.5">
+            <span className="text-sm font-mono tracking-wider text-fc-text">{p.symbol}</span>
+            <span className={cn('text-xs font-mono tracking-widest',
               p.positionType === 'long' ? 'text-fc-green' : p.positionType === 'short' ? 'text-red-400' : 'text-fc-text-dim'
             )}>
               {p.positionType === 'long' ? 'L' : p.positionType === 'short' ? 'S' : 'B'}
               {p.boost > 1 && ` ${p.boost}x`}
             </span>
-            <span className="text-[9px] text-fc-text-dim font-mono">{(p.weight * 100).toFixed(0)}%</span>
+            <span className="text-xs text-fc-text-dim font-mono">{(p.weight * 100).toFixed(0)}%</span>
             {/* Price range bar */}
-            <div className="h-1 bg-fc-bg rounded-full overflow-hidden">
+            <div className="h-1.5 bg-fc-bg rounded-full overflow-hidden">
               <div
                 className={cn('h-full rounded-full', p.pnlPercent >= 0 ? 'bg-fc-green' : 'bg-red-400')}
                 style={{ width: `${Math.min(Math.abs(p.pnlPercent) * 3, 100)}%` }}
               />
             </div>
-            <span className={cn('text-3xs font-mono text-right tracking-wider',
+            <span className={cn('text-sm font-mono text-right tracking-wider',
               p.pnlPercent >= 0 ? 'text-fc-green' : 'text-red-400'
             )}>
               {p.pnlPercent >= 0 ? '+' : ''}{p.pnlPercent.toFixed(1)}%
@@ -297,10 +297,9 @@ function BoxScore({ title, picks }: { title: string; picks: PickResult[] }) {
 
 function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="fc-card p-2 text-center">
-      <div className="text-[9px] text-fc-text-dim tracking-widest">{label}</div>
-      <div className={cn('text-xs font-mono font-bold', accent ? 'text-fc-green' : 'text-fc-text')}>{value}</div>
+    <div className="fc-card p-3 text-center">
+      <div className="text-xs text-fc-text-dim tracking-widest">{label}</div>
+      <div className={cn('text-sm font-mono font-bold', accent ? 'text-fc-green' : 'text-fc-text')}>{value}</div>
     </div>
   );
 }
-
