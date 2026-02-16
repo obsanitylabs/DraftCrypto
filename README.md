@@ -27,6 +27,7 @@ FormatPicksDurationDescriptionFast Match1 per player1DQuick head-to-head, single
 Draft Weighting
 Picks made in earlier rounds carry more portfolio weight, rewarding draft strategy:
 RoundWeightMultiplier125%3×220%3×315%2×415%2×5–610%1×7–82.5%1×
+
 Tech Stack
 Frontend
 
@@ -38,7 +39,6 @@ wagmi + viem for wallet connection (WalletConnect, MetaMask, Coinbase, Phantom)
 Deployed on Netlify with serverless functions
 
 Backend
-
 Fastify with WebSocket support for real-time drafts
 Prisma ORM with PostgreSQL
 Redis for price caching (optional — falls back to in-memory)
@@ -46,82 +46,12 @@ Hyperliquid API for real-time price feeds (30 tokens)
 JWT authentication with wallet signature verification
 
 Smart Contracts
-
 Solidity (Hardhat toolchain)
 Arbitrum One deployment target
 FantasyCryptoVault.sol — USDC escrow and settlement
 UNITEStaking.sol — Tier-based staking for platform access
 
-Project Structure
-DraftCrypto/
-├── src/                    # Next.js frontend
-│   ├── app/                # Pages (App Router)
-│   ├── components/         # UI components
-│   │   ├── draft/          # Draft room, token list, picks
-│   │   ├── landing/        # Hero, how-it-works, leaderboard
-│   │   ├── league/         # League lobby and detail views
-│   │   ├── lobby/          # Match creation and queue
-│   │   ├── match/          # Live match view, share cards
-│   │   ├── profile/        # Profile stats, leaderboard
-│   │   ├── ui/             # Design system primitives
-│   │   ├── unite/          # UNITE token staking
-│   │   └── wallet/         # Wallet connection modal
-│   ├── hooks/              # useDraft, useSocket, usePWA
-│   ├── lib/                # API client, utils, socket, wagmi config
-│   ├── services/           # Paper trading engine, Pear Protocol client
-│   ├── stores/             # Zustand stores (auth, match, draft, lineup)
-│   └── types/              # TypeScript type definitions
-├── server/                 # Fastify backend
-│   ├── src/
-│   │   ├── routes/         # REST endpoints (auth, matches, tokens, etc.)
-│   │   ├── ws/             # WebSocket draft room handler
-│   │   ├── services/       # Trade engine, settlement
-│   │   ├── middleware/     # JWT auth middleware
-│   │   ├── jobs/           # Stale match cleanup, scheduled tasks
-│   │   └── lib/            # Config, Redis, Prisma client
-│   └── prisma/             # Database schema
-├── contracts/              # Solidity smart contracts
-├── netlify/functions/      # Serverless functions (waitlist)
-└── docs/                   # Setup guides
-Getting Started
-Prerequisites
-
-Node.js 20+
-PostgreSQL (for backend)
-Redis (optional)
-
-Frontend
-bashnpm install
-npm run dev
-# → http://localhost:3000
-The frontend runs standalone with mock data and a simulated draft experience. No backend required for preview.
-Backend
-bashcd server
-cp .env.example .env
-# Edit .env with your DATABASE_URL, JWT_SECRET, etc.
-
-npm install
-npx prisma db push
-npm run dev
-# → http://localhost:3001
-Environment Variables
-VariableRequiredDescriptionDATABASE_URLBackendPostgreSQL connection stringJWT_SECRETBackend32+ char secret (crashes on startup if missing in production)REDIS_URLOptionalRedis connection (falls back to in-memory cache)WAITLIST_WEBHOOK_URLNetlifyGoogle Apps Script URL for waitlist collectionNEXT_PUBLIC_ADMIN_WALLETOptionalAdditional admin wallet addresses (comma-separated)
-Deployment
-Frontend (Netlify)
-Push to main triggers auto-deploy. The site builds as a static Next.js export.
-bashgit add .
-git commit -m "deploy"
-git push origin main
-Backend
-Deploy to any Node.js host (Railway, Render, Fly.io, etc.):
-bashcd server
-npm install
-npx prisma migrate deploy
-npm start
-Current Status
-✅ Paper Mode (v0.3)
-
-Real-time Binance price feeds (30 tokens)
+Real-time Pear Protocol price feeds (300+ tokens)
 Simulated draft experience with AI opponent
 PnL tracking with weighted portfolio calculation
 Wallet authentication (signature-based)
@@ -131,7 +61,7 @@ Waitlist collection via Google Sheets
 🚧 In Progress
 
 Backend ↔ frontend integration for real multiplayer drafts
-Hyperliquid API integration for live price data
+Pear Protocol API integration for live order routing
 League system backend routes
 
 📋 Roadmap to Live
