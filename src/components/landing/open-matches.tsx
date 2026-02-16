@@ -25,12 +25,12 @@ export function LandingOpenMatches() {
   const { setConnecting } = useAuthStore();
 
   return (
-    <div className="mb-7">
+    <div className="mb-12">
       <SectionTitle right={`${MOCK_OPEN_MATCHES.length} waiting`}>
         Open H2H Matches
       </SectionTitle>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         {MOCK_OPEN_MATCHES.slice(0, 3).map((match) => (
           <OpenMatchCard
             key={match.id}
@@ -41,7 +41,7 @@ export function LandingOpenMatches() {
       </div>
 
       <div
-        className="text-center py-2 text-3xs text-fc-text-dim cursor-pointer hover:text-fc-text-muted transition-colors"
+        className="text-center py-4 text-sm text-fc-text-dim cursor-pointer hover:text-fc-green transition-colors"
         onClick={() => setConnecting(true)}
       >
         Connect wallet to see all matches →
@@ -58,13 +58,13 @@ function OpenMatchCard({
   onJoin: () => void;
 }) {
   return (
-    <Card hover className="flex items-center justify-between p-3">
-      <div className="flex items-center gap-2">
+    <Card hover className="flex items-center justify-between p-4">
+      <div className="flex items-center gap-3">
         <MatchTypeBadge type={match.matchType} duration={match.duration} />
         <div>
-          <div className="text-2xs text-fc-text">{match.creator}</div>
-          <div className="flex items-center gap-1.5 mt-0.5">
-            <span className="text-3xs text-fc-text-muted">{match.wager} USDC</span>
+          <div className="text-sm text-fc-text font-medium">{match.creator}</div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs text-fc-text-muted">{match.wager} USDC</span>
             <TradeModeBadge mode={match.tradeMode} />
             <TierBadge tier={match.tier} />
           </div>

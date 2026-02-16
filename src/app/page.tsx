@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-// Fantasy Crypto — Landing Page
+// DraftCrypto — Landing Page
 // ═══════════════════════════════════════════════════════
 
 import { PageShell } from '@/components/layout';
@@ -12,7 +12,7 @@ import { WaitlistPopup } from '@/components/landing/waitlist-popup';
 export default function Home() {
   return (
     <PageShell>
-      <div className="px-4 pb-10">
+      <div className="pb-16">
         <LandingHero />
         <LandingHowItWorks />
         <LandingOpenMatches />

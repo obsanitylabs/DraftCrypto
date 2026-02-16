@@ -18,22 +18,22 @@ export function LandingLeaderboard() {
           <div
             key={p.rank}
             className={cn(
-              'flex items-center justify-between px-3 py-2.5',
+              'flex items-center justify-between px-5 py-4',
               i < MOCK_LEADERBOARD.length - 1 && 'border-b border-fc-border',
             )}
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-4">
               <span
                 className={cn(
-                  'text-xs font-bold w-4',
-                  p.rank === 1 ? 'text-fc-gold' : 'text-fc-text-muted',
+                  'text-lg font-bold w-6',
+                  p.rank === 1 ? 'text-fc-gold fc-glow-gold' : p.rank === 2 ? 'text-fc-text-muted' : 'text-fc-text-dim',
                 )}
               >
                 {p.rank}
               </span>
-              <span className="text-2xs">{p.name}</span>
+              <span className="text-sm font-medium">{p.name}</span>
             </div>
-            <span className="text-2xs text-fc-green font-bold">{p.pnl}</span>
+            <span className="text-sm text-fc-green font-bold">{p.pnl}</span>
           </div>
         ))}
       </Card>
